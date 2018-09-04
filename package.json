@@ -1,0 +1,24 @@
+{
+  "version": "0.0.0",
+  "name": "firefox-narrate-experiment",
+  "description": "An experimental add-on to change how Firefox reader mode and narration are presented",
+  "devDependencies": {
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.14.0",
+    "tape-ext": "latest",
+    "web-ext": "2.8.0"
+  },
+  "scripts": {
+    "test": "tape-ext 'test/*/manifest.json'",
+    "build": "web-ext build --ignore-files !node_modules --ignore-files !node_modules/libdweb --ignore-files !node_modules/libdweb/src --ignore-files !node_modules/libdweb/src/**",
+    "start": "MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly",
+    "dev": "MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly --browser-console --url about:debugging",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --parser flow --no-semi --write",
+      "git add"
+    ]
+  }
+}

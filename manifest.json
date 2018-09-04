@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "version": "0.1",
+  "name": "firefox-narrate-experiment",
+  "applications": {
+    "gecko": {
+      "id": "firefox-narrate-experiment@mozilla"
+    }
+  },
+  "description": "Template for Experimental Firefox WebExtensions using libdweb APIs.",
+  "experiment_apis": {
+    "readerIcon": {
+      "schema": "./src/experiment/readerIcon.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["readerIcon"]],
+        "script": "./src/experiment/readerIcon.js"
+      }
+    },
+    "aboutScripts": {
+      "schema": "./src/experiment/aboutScripts.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["aboutScripts"]],
+        "script": "./src/experiment/aboutScripts.js"
+      }
+    }
+  },
+  "background": {
+    "scripts": ["./src/main.js"]
+  }
+}
