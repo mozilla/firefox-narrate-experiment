@@ -8,7 +8,7 @@ const setIcon = async () => {
 browser.windows.onCreated.addListener(setIcon)
 browser.aboutScripts.register({
   matches: ["about:reader*"],
-  js: [{ file: "src/content-script.js" }]
+  js: [{ file: scriptURL }]
 })
 
 setIcon()

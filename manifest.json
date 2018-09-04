@@ -8,6 +8,7 @@
     }
   },
   "description": "Template for Experimental Firefox WebExtensions using libdweb APIs.",
+  "permissions": ["mozillaAddons"],
   "experiment_apis": {
     "readerIcon": {
       "schema": "./src/experiment/readerIcon.json",
