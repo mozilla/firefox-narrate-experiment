@@ -17,17 +17,15 @@
         "paths": [["readerIcon"]],
         "script": "./src/experiment/readerIcon.js"
       }
-    },
-    "aboutScripts": {
-      "schema": "./src/experiment/aboutScripts.json",
-      "parent": {
-        "scopes": ["addon_parent"],
-        "paths": [["aboutScripts"]],
-        "script": "./src/experiment/aboutScripts.js"
-      }
     }
   },
   "background": {
     "scripts": ["./src/main.js"]
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["about:reader*"],
+      "js": ["./src/content-script.js"]
+    }
+  ]
 }
