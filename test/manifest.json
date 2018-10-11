@@ -1,0 +1,71 @@
+{
+  "manifest_version": 2,
+  "version": "0.1",
+  "name": "api-test",
+  "permissions": [],
+
+  "experiment_apis": {
+    "test": {
+      "schema": "../../node_modules/libdweb/src/test/test.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["test"]],
+        "script": "../../node_modules/libdweb/src/test/test.js"
+      }
+    },
+    "protocol": {
+      "schema": "../../node_modules/libdweb/src/protocol/protocol.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["protocol"]],
+        "script": "../../node_modules/libdweb/src/protocol/client.js"
+      },
+      "parent": {
+        "events": ["startup"],
+        "scopes": ["addon_parent"],
+        "paths": [["protocol"]],
+        "script": "../../node_modules/libdweb/src/protocol/host.js"
+      }
+    },
+    "ServiceDiscovery": {
+      "schema": "../../node_modules/libdweb/src/ServiceDiscovery/ServiceDiscovery.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["ServiceDiscovery"]],
+        "script": "../../node_modules/libdweb/src/ServiceDiscovery/client.js"
+      },
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["ServiceDiscovery"]],
+        "script": "../../node_modules/libdweb/src/ServiceDiscovery/host.js"
+      }
+    },
+    "FileSystem": {
+      "schema": "../../node_modules/libdweb/src/FileSystem/FileSystem.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["FileSystem"]],
+        "script": "../../node_modules/libdweb/src/FileSystem/host.js"
+      }
+    },
+    "TCPSocket": {
+      "schema": "../../node_modules/libdweb/src/TCPSocket/TCPSocket.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["TCPSocket"]],
+        "script": "../../node_modules/libdweb/src/TCPSocket/Socket.js"
+      }
+    },
+    "UDPSocket": {
+      "schema": "../../node_modules/libdweb/src/UDPSocket/UDPSocket.json",
+      "child": {
+        "scopes": ["addon_child"],
+        "paths": [["UDPSocket"]],
+        "script": "../../node_modules/libdweb/src/UDPSocket/Socket.js"
+      }
+    }
+  },
+  "background": {
+    "scripts": ["test.js"]
+  }
+}

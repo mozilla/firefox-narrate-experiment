@@ -4,18 +4,25 @@
     "description": "Change the Reader Mode icon",
     "functions": [
       {
-        "name": "change",
+        "name": "activate",
         "type": "function",
-        "description": "Changes the Reader Mode icon in the current window.",
+        "description": "Activates narrate experiment.",
         "async": true,
         "parameters": [
           {
-            "type": "string",
-            "name": "icon"
-          },
-          {
-            "type": "number",
-            "name": "width"
+            "name": "config",
+            "type": "object",
+            "properties": {
+              "iconURL": { "type": "string" },
+              "iconWidth": { "type": "number" },
+              "popup": {
+                "type": "object",
+                "optional": true,
+                "properties": {
+                  "iconURL": { "type": "string" }
+                }
+              }
+            }
           }
         ]
       }

@@ -1,8 +1,7 @@
-const iconURL = browser.extension.getURL("listen-with-label.svg")
-
-const setIcon = async () => {
-  await browser.readerIcon.change(iconURL, 52)
-}
-
-browser.windows.onCreated.addListener(setIcon)
-setIcon()
+browser.readerIcon.activate({
+  iconURL: browser.extension.getURL("listen-with-label.svg"),
+  iconWidth: 52,
+  popup: {
+    iconURL: browser.extension.getURL("listen-without-label.svg")
+  }
+})
