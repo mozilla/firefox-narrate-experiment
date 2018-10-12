@@ -1,7 +1,6 @@
 [
   {
-    "namespace": "readerIcon",
-    "description": "Change the Reader Mode icon",
+    "namespace": "narrate",
     "functions": [
       {
         "name": "activate",

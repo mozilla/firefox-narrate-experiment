@@ -8,14 +8,14 @@
     }
   },
   "description": "Template for Experimental Firefox WebExtensions using libdweb APIs.",
-  "permissions": ["mozillaAddons"],
+  "permissions": ["mozillaAddons", "storage"],
   "experiment_apis": {
-    "readerIcon": {
-      "schema": "./src/experiment/readerIcon.json",
+    "narrate": {
+      "schema": "./src/experiment/narrate.json",
       "parent": {
         "scopes": ["addon_parent"],
-        "paths": [["readerIcon"]],
-        "script": "./src/experiment/readerIcon.js"
+        "paths": [["narrate"]],
+        "script": "./src/experiment/narrate.js"
       }
     }
   },

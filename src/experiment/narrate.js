@@ -1,6 +1,10 @@
 {
   const { classes: Cc, interfaces: Ci, utils: Cu } = Components
   const { Services } = Cu.import("resource://gre/modules/Services.jsm", {})
+  const { extensionStorageSync } = Cu.import(
+    "resource://gre/modules/ExtensionStorageSync.jsm",
+    {}
+  )
   const ANCHOR_SUFFIX = "popupnotificationanchor"
   const ARCHOR_ID = "-notification-icon"
   const ID = "reader-mode-button"
@@ -15,18 +19,20 @@
   const { windowTracker } = ExtensionParent.apiManager.global
 
   class NarrateActor {
-    static spawn(config) {
-      const self = new this(config)
+    static spawn(config, isPopupEnabled, disablePopup) {
+      const self = new this(config, isPopupEnabled, disablePopup)
       self.init()
       return self
     }
-    constructor(config) {
+    constructor(config, isPopupEnabled, disablePopup) {
       this.config = config
+      this.isPopupEnabled = isPopupEnabled && config.popup != null
+      this.disablePopup = disablePopup
       this.onOpenWindow = this.onOpenWindow.bind(this)
     }
     init() {
-      if (this.config.popup) {
-        Services.mm.addMessageListener("Reader:UpdateReaderButton", this)
+      if (this.isPopupEnabled) {
+        this.addMessageListener()
       }
 
       windowTracker.addOpenListener(this.onOpenWindow)
@@ -37,26 +43,35 @@
     }
     exit(reason) {
       windowTracker.removeOpenListener(this.onOpenWindow)
-      if (this.config.popup) {
-        Services.mm.removeMessageListener("Reader:UpdateReaderButton", this)
+      if (this.isPopupEnabled) {
+        this.removeMessageListener()
       }
 
       for (const window of windowTracker.browserWindows()) {
         this.resetWindow(window)
       }
     }
+    addMessageListener() {
+      Services.mm.addMessageListener("Reader:UpdateReaderButton", this)
+    }
+    removeMessageListener() {
+      Services.mm.removeMessageListener("Reader:UpdateReaderButton", this)
+    }
     onOpenWindow({ document }) {
       patchIcon(document, this.config)
-      if (this.config.popup) {
+      if (this.isPopupEnabled) {
         this.addPopupListeners(document)
       }
     }
     resetWindow({ document }) {
       resetIcon(document)
-      if (this.config.popup) {
-        removePopupView(document)
-        this.removePopupListeners(document)
+      if (this.isPopupEnabled) {
+        this.removePopup(document)
       }
+    }
+    removePopup(document) {
+      removePopupView(document)
+      this.removePopupListeners(document)
     }
     addPopupListeners(document) {
       document.addEventListener(PRIMARY_ACTION, this)
@@ -88,15 +103,31 @@
       if (button) {
         button.click()
       }
+      this.onDisablePopup()
     }
     onSecondaryAction(document) {
       hidePopup(document)
+      this.onDisablePopup()
+    }
+    onDisablePopup() {
+      if (this.isPopupEnabled) {
+        this.isPopupEnabled = false
+
+        this.removeMessageListener()
+        for (const window of windowTracker.browserWindows()) {
+          this.removePopup(window.document)
+        }
+
+        this.disablePopup()
+      }
     }
     onReaderButtonUpdate({ target, data }) {
-      if (data && data.isArticle) {
-        showPopup(target.ownerDocument, this.config.popup)
-      } else {
-        hidePopup(target.ownerDocument)
+      if (this.isPopupEnabled) {
+        if (data && data.isArticle) {
+          showPopup(target.ownerDocument, this.config.popup)
+        } else {
+          hidePopup(target.ownerDocument)
+        }
       }
     }
   }
@@ -127,7 +158,7 @@
     await document.defaultView.PanelMultiView.openPopup(
       panel,
       button,
-      "bottomcenter topleft"
+      "bottomcenter topright"
     )
   }
 
@@ -188,12 +219,27 @@
 
     return document.querySelector("#mainPopupSet").appendChild(panel)
   }
-  this.readerIcon = class readerIcon extends ExtensionAPI {
+  this.narrate = class NarrateAPI extends ExtensionAPI {
     getAPI(context) {
       return {
-        readerIcon: {
+        narrate: {
           activate: async config => {
-            this.actor = NarrateActor.spawn(config)
+            const { isPopupEnabled } = await extensionStorageSync.get(
+              context.extension,
+              ["isPopupEnabled"],
+              context
+            )
+
+            this.actor = NarrateActor.spawn(
+              config,
+              isPopupEnabled != false,
+              () =>
+                extensionStorageSync.get(
+                  context.extension,
+                  { isPopupEnabled: false },
+                  context
+                )
+            )
           }
         }
       }

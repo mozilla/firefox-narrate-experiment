@@ -1,4 +1,4 @@
-browser.readerIcon.activate({
+browser.narrate.activate({
   iconURL: browser.extension.getURL("listen-with-label.svg"),
   iconWidth: 52,
   popup: {
