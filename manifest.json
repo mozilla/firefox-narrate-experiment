@@ -19,6 +19,9 @@
       }
     }
   },
+  "icons": {
+    "96": "listen-without-label.svg"
+  },
   "background": {
     "scripts": ["./src/main.js"]
   },
