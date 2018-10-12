@@ -84,7 +84,7 @@
         const ui = PopupNotifications.show(
           browser,
           POPUP_ID,
-          "Need to multi-task or just rest your eyes? Firefox can read webpages to you.",
+          "<> Firefox can read you any page on the internet.",
           ID,
           {
             label: "Listen to this Article",
@@ -103,7 +103,10 @@
             }
           ],
           {
-            popupIconURL: popup.iconURL
+            name: "Want to listen instead ?",
+            popupIconURL: popup.iconURL,
+            dismissed: false,
+            hideClose: true
           }
         )
       }
