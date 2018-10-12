@@ -19,7 +19,11 @@
                 "type": "object",
                 "optional": true,
                 "properties": {
-                  "iconURL": { "type": "string" }
+                  "iconURL": { "type": "string" },
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "primaryButtonLabel": { "type": "string" },
+                  "secondaryButtonLabel": { "type": "string" }
                 }
               }
             }
