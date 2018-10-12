@@ -234,7 +234,7 @@
               config,
               isPopupEnabled != false,
               () =>
-                extensionStorageSync.get(
+                extensionStorageSync.set(
                   context.extension,
                   { isPopupEnabled: false },
                   context
