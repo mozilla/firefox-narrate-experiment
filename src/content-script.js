@@ -40,7 +40,7 @@ class NarrateExperiment {
 
     const narrateDropDown = document.querySelector(".narrate-dropdown")
     if (narrateDropDown) {
-      narrateDropDown.removeLEventistener("click", this)
+      narrateDropDown.removeEventListener("click", this)
     }
 
     window.removeEventListener("beforeunload", this)

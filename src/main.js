@@ -28,14 +28,20 @@ class Feature {
     }
   }
   constructor() {
-    this.state = browser.storage.sync.get(["dispalySurvey"])
+    this.state = this.readState()
     this.ports = new Set()
     this.onReceive = this.onReceive.bind(this)
     this.onDisconnect = this.onDisconnect.bind(this)
     this.onConnect = this.onConnect.bind(this)
     this.onSuspend = this.onSuspend.bind(this)
     browser.runtime.onConnect.addListener(this.onConnect)
-    browser.runtime.onSuspend.addListener(this.onSuspend)
+  }
+  async readState() {
+    const state = await browser.storage.sync.get(["dispalySurvey"])
+    if (state.dispalySurvey == null) {
+      state.dispalySurvey = true
+    }
+    return state
   }
   deactivate() {
     browser.narrate.deactivate()
@@ -54,11 +60,13 @@ class Feature {
       this.dispalySurvey()
     } else {
       const payload = {
-        tab: port.sender.tab.id,
+        message: "narrate-playback",
+        tab: `${port.sender.tab.id}`,
         duration: message.duration,
         reason: message.reason
       }
       console.log(payload)
+
       browser.study.sendTelemetry(payload)
     }
   }
@@ -66,10 +74,12 @@ class Feature {
     this.ports.delete(port)
   }
   async onConnect(port) {
+    console.log("onConnect")
     this.ports.add(port)
     port.onMessage.addListener(this.onReceive)
     port.onDisconnect.addListener(this.onDisconnect)
     const state = await this.state
+    console.log("connect", state)
     port.postMessage({ type: "init", state })
   }
   dispalySurvey() {

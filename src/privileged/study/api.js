@@ -64,7 +64,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 66);
+/******/ 	return __webpack_require__(__webpack_require__.s = 68);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,7 +84,7 @@ module.exports = {
   getProperty: getProperty,
   escapeQuotes: escapeQuotes,
   equal: __webpack_require__(4),
-  ucs2length: __webpack_require__(26),
+  ucs2length: __webpack_require__(28),
   varOccurences: varOccurences,
   varReplace: varReplace,
   cleanUpCode: cleanUpCode,
@@ -357,9 +357,9 @@ function unescapeJsonPointer(str) {
 /* harmony export (immutable) */ __webpack_exports__["j"] = equal;
 /* harmony export (immutable) */ __webpack_exports__["k"] = escapeComponent;
 /* harmony export (immutable) */ __webpack_exports__["l"] = unescapeComponent;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__regexps_uri__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__regexps_iri__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_punycode__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__regexps_uri__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__regexps_iri__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_punycode__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_punycode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_punycode__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(5);
 /**
@@ -893,11 +893,11 @@ function errorSubclass(Subclass) {
 "use strict";
 
 
-var URI = __webpack_require__(56)
+var URI = __webpack_require__(58)
   , equal = __webpack_require__(4)
   , util = __webpack_require__(0)
-  , SchemaObject = __webpack_require__(8)
-  , traverse = __webpack_require__(52);
+  , SchemaObject = __webpack_require__(9)
+  , traverse = __webpack_require__(54);
 
 module.exports = resolve;
 
@@ -1278,6 +1278,8 @@ function assign(target, source) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return createLogger; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return utilsLogger; });
 /* eslint-env commonjs */
 
 
@@ -1287,43 +1289,58 @@ function assign(target, source) {
  *
  * The pref to control this is "shieldStudy.logLevel"
  *
- * @param {string} logPrefix - the name of the Console instance
- * @param {string} level - level to use by default
+ * @param {string} prefix - a prefix string to be printed before
+ *                            the actual logged message
+ * @param {string} maxLogLevelPref - String pref name which contains the
+ *                            level to use for maxLogLevel
+ * @param {string} maxLogLevel - level to use by default, see LOG_LEVELS in gre/modules/Console.jsm
  * @returns {Object} - the Console instance, see gre/modules/Console.jsm
  */
-function createShieldStudyLogger(logPrefix, level = "Warn") {
-  const prefName = "shieldStudy.logLevel";
+function createLogger(prefix, maxLogLevelPref, maxLogLevel = "warn") {
   const ConsoleAPI = ChromeUtils.import(
     "resource://gre/modules/Console.jsm",
     {},
   ).ConsoleAPI;
   return new ConsoleAPI({
-    maxLogLevel: level,
-    maxLogLevelPref: prefName,
-    prefix: logPrefix,
+    prefix,
+    maxLogLevelPref,
+    maxLogLevel,
   });
 }
 
-const logger = createShieldStudyLogger("shield-study-utils");
+const utilsLogger = createLogger("shield-study-utils", "shieldStudy.logLevel");
 
-/* harmony default export */ __webpack_exports__["a"] = (logger);
+
 
 
 /***/ }),
 /* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function makeWidgetId(id) {
+  id = id.toLowerCase();
+  return id.replace(/[^a-z0-9_-]/g, "_");
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (makeWidgetId);
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var compileSchema = __webpack_require__(24)
+var compileSchema = __webpack_require__(26)
   , resolve = __webpack_require__(3)
-  , Cache = __webpack_require__(21)
-  , SchemaObject = __webpack_require__(8)
-  , stableStringify = __webpack_require__(15)
-  , formats = __webpack_require__(23)
-  , rules = __webpack_require__(25)
-  , $dataMetaSchema = __webpack_require__(27)
+  , Cache = __webpack_require__(23)
+  , SchemaObject = __webpack_require__(9)
+  , stableStringify = __webpack_require__(16)
+  , formats = __webpack_require__(25)
+  , rules = __webpack_require__(27)
+  , $dataMetaSchema = __webpack_require__(29)
   , util = __webpack_require__(0);
 
 module.exports = Ajv;
@@ -1341,8 +1358,8 @@ Ajv.prototype.errorsText = errorsText;
 Ajv.prototype._addSchema = _addSchema;
 Ajv.prototype._compile = _compile;
 
-Ajv.prototype.compileAsync = __webpack_require__(22);
-var customKeyword = __webpack_require__(49);
+Ajv.prototype.compileAsync = __webpack_require__(24);
+var customKeyword = __webpack_require__(51);
 Ajv.prototype.addKeyword = customKeyword.add;
 Ajv.prototype.getKeyword = customKeyword.get;
 Ajv.prototype.removeKeyword = customKeyword.remove;
@@ -1758,11 +1775,11 @@ function addFormat(name, format) {
 function addDraft6MetaSchema(self) {
   var $dataSchema;
   if (self._opts.$data) {
-    $dataSchema = __webpack_require__(50);
+    $dataSchema = __webpack_require__(52);
     self.addMetaSchema($dataSchema, $dataSchema.$id, true);
   }
   if (self._opts.meta === false) return;
-  var metaSchema = __webpack_require__(51);
+  var metaSchema = __webpack_require__(53);
   if (self._opts.$data) metaSchema = $dataMetaSchema(metaSchema, META_SUPPORT_DATA);
   self.addMetaSchema(metaSchema, META_SCHEMA_ID, true);
   self._refs['http://json-schema.org/schema'] = META_SCHEMA_ID;
@@ -1816,7 +1833,7 @@ function noop() {}
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1832,7 +1849,7 @@ function SchemaObject(obj) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1994,7 +2011,7 @@ module.exports = function generate__limit(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2077,7 +2094,7 @@ module.exports = function generate__limitItems(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2165,7 +2182,7 @@ module.exports = function generate__limitLength(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2248,7 +2265,7 @@ module.exports = function generate__limitProperties(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2700,13 +2717,13 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = {"id":"http://json-schema.org/draft-04/schema#","$schema":"http://json-schema.org/draft-04/schema#","description":"Core schema meta-schema","definitions":{"schemaArray":{"type":"array","minItems":1,"items":{"$ref":"#"}},"positiveInteger":{"type":"integer","minimum":0},"positiveIntegerDefault0":{"allOf":[{"$ref":"#/definitions/positiveInteger"},{"default":0}]},"simpleTypes":{"enum":["array","boolean","integer","null","number","object","string"]},"stringArray":{"type":"array","items":{"type":"string"},"minItems":1,"uniqueItems":true}},"type":"object","properties":{"id":{"type":"string","format":"uri"},"$schema":{"type":"string","format":"uri"},"title":{"type":"string"},"description":{"type":"string"},"default":{},"multipleOf":{"type":"number","minimum":0,"exclusiveMinimum":true},"maximum":{"type":"number"},"exclusiveMaximum":{"type":"boolean","default":false},"minimum":{"type":"number"},"exclusiveMinimum":{"type":"boolean","default":false},"maxLength":{"$ref":"#/definitions/positiveInteger"},"minLength":{"$ref":"#/definitions/positiveIntegerDefault0"},"pattern":{"type":"string","format":"regex"},"additionalItems":{"anyOf":[{"type":"boolean"},{"$ref":"#"}],"default":{}},"items":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/schemaArray"}],"default":{}},"maxItems":{"$ref":"#/definitions/positiveInteger"},"minItems":{"$ref":"#/definitions/positiveIntegerDefault0"},"uniqueItems":{"type":"boolean","default":false},"maxProperties":{"$ref":"#/definitions/positiveInteger"},"minProperties":{"$ref":"#/definitions/positiveIntegerDefault0"},"required":{"$ref":"#/definitions/stringArray"},"additionalProperties":{"anyOf":[{"type":"boolean"},{"$ref":"#"}],"default":{}},"definitions":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"properties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"patternProperties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"dependencies":{"type":"object","additionalProperties":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/stringArray"}]}},"enum":{"type":"array","minItems":1,"uniqueItems":true},"type":{"anyOf":[{"$ref":"#/definitions/simpleTypes"},{"type":"array","items":{"$ref":"#/definitions/simpleTypes"},"minItems":1,"uniqueItems":true}]},"allOf":{"$ref":"#/definitions/schemaArray"},"anyOf":{"$ref":"#/definitions/schemaArray"},"oneOf":{"$ref":"#/definitions/schemaArray"},"not":{"$ref":"#"}},"dependencies":{"exclusiveMaximum":["maximum"],"exclusiveMinimum":["minimum"]},"default":{}}
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2772,7 +2789,7 @@ module.exports = function (data, opts) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -3308,10 +3325,10 @@ module.exports = function (data, opts) {
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module), __webpack_require__(62)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module), __webpack_require__(64)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3361,7 +3378,7 @@ function buildExps(isIRI) {
 //# sourceMappingURL=regexps-uri.js.map
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3394,15 +3411,17 @@ const handler = {
 //# sourceMappingURL=http.js.map
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sampling__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sampling__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__logger__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__jsonschema__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__makeWidgetId__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__jsonschema__ = __webpack_require__(69);
 /* eslint-env commonjs */
+
 
 
 
@@ -3428,10 +3447,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 * Tests for this module are at /test-addon.
 */
 
-const UTILS_VERSION = __webpack_require__(64).version;
+const UTILS_VERSION = __webpack_require__(66).version;
 const PACKET_VERSION = 3;
 
-const Ajv = __webpack_require__(7);
+const Ajv = __webpack_require__(8);
 
 const { Services } = ChromeUtils.import(
   "resource://gre/modules/Services.jsm",
@@ -3477,9 +3496,9 @@ const { TelemetryEnvironment } = ChromeUtils.import(
  */
 const schemas = {
   // Telemetry PingType schemas
-  "shield-study": __webpack_require__(55), // eslint-disable-line max-len
-  "shield-study-addon": __webpack_require__(53), // eslint-disable-line max-len
-  "shield-study-error": __webpack_require__(54), // eslint-disable-line max-len
+  "shield-study": __webpack_require__(57), // eslint-disable-line max-len
+  "shield-study-addon": __webpack_require__(55), // eslint-disable-line max-len
+  "shield-study-error": __webpack_require__(56), // eslint-disable-line max-len
 };
 
 
@@ -3492,11 +3511,11 @@ class Guard {
    *
    */
   constructor(identifiedSchemas) {
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("wanting guard");
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("wanting guard");
     const ajv = new Ajv({
       // important:  these options make ajv behave like 04, not draft-07
       schemaId: "auto", // id UNLESS $id is defined. (draft 5)
-      meta: __webpack_require__(14),
+      meta: __webpack_require__(15),
       extendRefs: true, // optional, current default is to 'fail', spec behaviour is to 'ignore'
       unknownFormats: "ignore", // optional, current default is true (fail)
       validateSchema: false, // used by addSchema.
@@ -3507,16 +3526,16 @@ class Guard {
     });
 
     for (const s of identifiedSchemas) {
-      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`adding schemas ${s}`);
+      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`adding schemas ${s}`);
 
       ajv.addSchema(s);
     }
     this.ajv = ajv;
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("Ajv schemas", Object.keys(this.ajv._schemas));
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("Ajv schemas", Object.keys(this.ajv._schemas));
   }
 
   it(schemaId, arg, msg = null) {
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("about to guard", schemaId, arg);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("about to guard", schemaId, arg);
     const valid = this.ajv.validate(schemaId, arg);
     if (!valid) {
       throw new ExtensionError(
@@ -3527,7 +3546,7 @@ class Guard {
     }
   }
 }
-const guard = new Guard(__webpack_require__(65)[0].types);
+const guard = new Guard(__webpack_require__(67)[0].types);
 
 /**  Simple spread/rest based merge, using Object.assign.
  *
@@ -3600,7 +3619,7 @@ class StudyUtils {
     // expose schemas
     this.schemas = schemas;
     // expose jsonschema validation methods
-    this.jsonschema = __WEBPACK_IMPORTED_MODULE_2__jsonschema__["a" /* default */];
+    this.jsonschema = __WEBPACK_IMPORTED_MODULE_3__jsonschema__["a" /* default */];
 
     this._extensionManifest = {};
 
@@ -3615,14 +3634,8 @@ class StudyUtils {
         "_createInternals needs `setExtensionManifest`. This should be done by `getApi`.",
       );
     }
-    function makeWidgetId(id) {
-      id = id.toLowerCase();
-      // FIXME: This allows for collisions.
-      // WebExt hasn't ever had a problem.
-      return id.replace(/[^a-z0-9_-]/g, "_");
-    }
 
-    const widgetId = makeWidgetId(
+    const widgetId = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__makeWidgetId__["a" /* default */])(
       this._extensionManifest.applications.gecko.id,
     );
 
@@ -3662,7 +3675,7 @@ class StudyUtils {
   }
 
   /**
-   * Validates the studySetup object passed in from the addon.
+   * Validates the studySetup object passed in from the add-on.
    * @param {Object} studySetup - the studySetup object, see schema.studySetup.json
    * @returns {StudyUtils} - the StudyUtils class instance
    */
@@ -3671,7 +3684,7 @@ class StudyUtils {
       throw new ExtensionError("StudyUtils internals are not initiated");
     }
 
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`setting up! -- ${JSON.stringify(studySetup)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`setting up! -- ${JSON.stringify(studySetup)}`);
 
     if (this._internals.isSetup) {
       throw new ExtensionError("StudyUtils is already setup");
@@ -3700,7 +3713,7 @@ class StudyUtils {
         studySetup.activeExperimentName,
         studySetup.weightedVariations,
       ));
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`setting up: variation ${variation.name}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`setting up: variation ${variation.name}`);
 
     this._internals.variation = variation;
     this._internals.studySetup = studySetup;
@@ -3736,7 +3749,9 @@ class StudyUtils {
    */
   getVariation() {
     this.throwIfNotSetup("getvariation");
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`getVariation: ${JSON.stringify(this._internals.variation)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(
+      `getVariation: ${JSON.stringify(this._internals.variation)}`,
+    );
     return this._internals.variation;
   }
 
@@ -3828,7 +3843,7 @@ class StudyUtils {
    * @returns {Object} - study information, see schema.studySetup.json
    */
   info() {
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("getting info");
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("getting info");
     this.throwIfNotSetup("info");
 
     const studyInfo = {
@@ -3845,7 +3860,7 @@ class StudyUtils {
 
   /**
    * Get the telemetry configuration for the study.
-   * @returns {Object} - the telemetry cofiguration, see schema.studySetup.json
+   * @returns {Object} - the telemetry configuration, see schema.studySetup.json
    */
   get telemetryConfig() {
     this.throwIfNotSetup("telemetryConfig");
@@ -3874,12 +3889,12 @@ class StudyUtils {
         12,
       );
     }
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`_deterministicVariation`, weightedVariations);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`_deterministicVariation`, weightedVariations);
     return this.sampling.chooseWeighted(weightedVariations, fraction);
   }
 
   /**
-   * Sends an 'enter' telemetry ping for the study; should be called on addon
+   * Sends an 'enter' telemetry ping for the study; should be called on add-on
    * startup for the reason ADDON_INSTALL. For more on study states like 'enter'
    * see ABOUT.md at github.com/mozilla/shield-studies-addon-template
    *
@@ -3891,7 +3906,7 @@ class StudyUtils {
    */
   async firstSeen() {
     this.throwIfNotSetup("firstSeen uses telemetry.");
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`attempting firstSeen`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`attempting firstSeen`);
     this._internals.isFirstRun = true;
     await this._telemetry({ study_state: "enter" }, "shield-study");
     this.setFirstRunTimestamp(Date.now());
@@ -3906,7 +3921,7 @@ class StudyUtils {
   setActive() {
     this.throwIfNotSetup("setActive uses telemetry.");
     const info = this.info();
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(
       "marking TelemetryEnvironment",
       info.activeExperimentName,
       info.variation.name,
@@ -3924,7 +3939,7 @@ class StudyUtils {
   unsetActive() {
     this.throwIfNotSetup("unsetActive uses telemetry.");
     const info = this.info();
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(
       "unmarking TelemetryEnvironment",
       info.activeExperimentName,
       info.variation.name,
@@ -3935,13 +3950,13 @@ class StudyUtils {
   /**
    * Adds the study to the active list of telemetry experiments and sends the
    * "installed" telemetry ping if applicable
-   * @param {string} reason - The reason the addon has started up
+   * @param {string} reason - The reason the add-on has started up
    * @returns {void}
    */
   async startup() {
     this.throwIfNotSetup("startup");
     const isFirstRun = this._internals.isFirstRun;
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`startup.  setting active. isFirstRun? ${isFirstRun}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`startup.  setting active. isFirstRun? ${isFirstRun}`);
     this.setActive();
     if (isFirstRun) {
       await this._telemetry({ study_state: "installed" }, "shield-study");
@@ -3975,7 +3990,7 @@ class StudyUtils {
 
     // throw if already ending
     if (this._internals.isEnding) {
-      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("endStudy, already ending!");
+      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("endStudy, already ending!");
       throw new ExtensionError(
         `endStudy, requested:  ${endingName}, but already ending ${
           this._internals.endingRequested
@@ -3987,7 +4002,7 @@ class StudyUtils {
     this._internals.isEnding = true;
     this._internals.endingRequested = endingName;
 
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`endStudy ${endingName}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`endStudy ${endingName}`);
     await this.unsetActive();
 
     // do the work to end the studyUtils involvement
@@ -4095,9 +4110,9 @@ class StudyUtils {
    */
   async _telemetry(data, bucket = "shield-study-addon") {
     this.throwIfNotSetup("_telemetry");
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`telemetry in:  ${bucket} ${JSON.stringify(data)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`telemetry in:  ${bucket} ${JSON.stringify(data)}`);
     const info = this.info();
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`telemetry INFO: ${JSON.stringify(info)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`telemetry INFO: ${JSON.stringify(info)}`);
 
     const payload = {
       version: PACKET_VERSION,
@@ -4112,11 +4127,11 @@ class StudyUtils {
 
     let validation;
     try {
-      validation = __WEBPACK_IMPORTED_MODULE_2__jsonschema__["a" /* default */].validate(payload, schemas[bucket]);
+      validation = __WEBPACK_IMPORTED_MODULE_3__jsonschema__["a" /* default */].validate(payload, schemas[bucket]);
     } catch (err) {
-      // Catch failures of unknown origin (could be library, addon, system...)
+      // Catch failures of unknown origin (could be library, add-on, system...)
       // if validation broke, GIVE UP.
-      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].error(err);
+      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].error(err);
       return false;
     }
     /*
@@ -4133,12 +4148,12 @@ class StudyUtils {
         message: JSON.stringify(validation.errors),
       };
       if (bucket === "shield-study-error") {
-        __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].warn("cannot validate shield-study-error", data, bucket);
+        __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].warn("cannot validate shield-study-error", data, bucket);
         return false; // just die, maybe should have a super escape hatch?
       }
       return this.telemetryError(errorReport);
     }
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`telemetry: ${JSON.stringify(payload)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`telemetry: ${JSON.stringify(payload)}`);
 
     // IFF it's a shield-study or error ping, which are few in number
     if (bucket === "shield-study" || bucket === "shield-study-error") {
@@ -4147,7 +4162,7 @@ class StudyUtils {
 
     // during developement, don't actually send
     if (!this.telemetryConfig.send) {
-      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug("NOT sending.  `telemetryConfig.send` is false");
+      __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug("NOT sending.  `telemetryConfig.send` is false");
       return false;
     }
 
@@ -4156,14 +4171,14 @@ class StudyUtils {
   }
 
   /**
-   * Validates and submits telemetry pings from the addon; mostly from
+   * Validates and submits telemetry pings from the add-on; mostly from
    * webExtension messages.
    * @param {Object} data - the data to send as part of the telemetry packet
    * @returns {Promise|boolean} - see StudyUtils._telemetry
    */
   async telemetry(data) {
     this.throwIfNotSetup("telemetry");
-    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* default */].debug(`telemetry ${JSON.stringify(data)}`);
+    __WEBPACK_IMPORTED_MODULE_1__logger__["a" /* utilsLogger */].debug(`telemetry ${JSON.stringify(data)}`);
     const toSubmit = {
       attributes: data,
     };
@@ -4187,7 +4202,7 @@ this.studyUtils = studyUtils;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /* eslint-env node */
@@ -4245,7 +4260,7 @@ async function searchTelemetryArchive(TelemetryArchive, searchTelemetryQuery) {
   return Promise.all(pingData);
 }
 
-// TODO pings report, from the utility addon
+// TODO pings report, from the utility add-on
 
 module.exports = {
   searchTelemetryArchive,
@@ -4253,7 +4268,39 @@ module.exports = {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = getTestingOverrides;
+/* harmony export (immutable) */ __webpack_exports__["a"] = listPreferences;
+const { Preferences } = ChromeUtils.import(
+  "resource://gre/modules/Preferences.jsm",
+  {},
+);
+
+function getTestingOverrides(widgetId) {
+  const testingOverrides = {};
+  testingOverrides.variationName =
+    Preferences.get(`extensions.${widgetId}.test.variationName`) || null;
+  testingOverrides.firstRunTimestamp =
+    Preferences.get(`extensions.${widgetId}.test.firstRunTimestamp`) || null;
+  testingOverrides.expired =
+    Preferences.get(`extensions.${widgetId}.test.expired`) || null;
+  return testingOverrides;
+}
+
+function listPreferences(widgetId) {
+  return [
+    `extensions.${widgetId}.test.variationName`,
+    `extensions.${widgetId}.test.firstRunTimestamp`,
+    `extensions.${widgetId}.test.expired`,
+  ];
+}
+
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4286,7 +4333,7 @@ Cache.prototype.clear = function Cache_clear() {
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4383,7 +4430,7 @@ function compileAsync(schema, meta, callback) {
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4539,7 +4586,7 @@ function regex(str) {
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4548,9 +4595,9 @@ function regex(str) {
 var resolve = __webpack_require__(3)
   , util = __webpack_require__(0)
   , errorClasses = __webpack_require__(2)
-  , stableStringify = __webpack_require__(15);
+  , stableStringify = __webpack_require__(16);
 
-var validateGenerator = __webpack_require__(13);
+var validateGenerator = __webpack_require__(14);
 
 /**
  * Functions below are used inside compiled validations function
@@ -4925,13 +4972,13 @@ function vars(arr, statement) {
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ruleModules = __webpack_require__(38)
+var ruleModules = __webpack_require__(40)
   , toHash = __webpack_require__(0).toHash;
 
 module.exports = function rules() {
@@ -4998,7 +5045,7 @@ module.exports = function rules() {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5025,7 +5072,7 @@ module.exports = function ucs2length(str) {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5081,7 +5128,7 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5131,7 +5178,7 @@ module.exports = function generate_allOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5211,7 +5258,7 @@ module.exports = function generate_anyOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5232,7 +5279,7 @@ module.exports = function generate_comment(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5294,7 +5341,7 @@ module.exports = function generate_const(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5382,7 +5429,7 @@ module.exports = function generate_contains(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5615,7 +5662,7 @@ module.exports = function generate_custom(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5789,7 +5836,7 @@ module.exports = function generate_dependencies(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5861,7 +5908,7 @@ module.exports = function generate_enum(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6017,7 +6064,7 @@ module.exports = function generate_format(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6127,7 +6174,7 @@ module.exports = function generate_if(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6135,39 +6182,39 @@ module.exports = function generate_if(it, $keyword, $ruleType) {
 
 //all requires must be explicit because browserify won't work with dynamic requires
 module.exports = {
-  '$ref': __webpack_require__(46),
-  allOf: __webpack_require__(28),
-  anyOf: __webpack_require__(29),
-  '$comment': __webpack_require__(30),
-  const: __webpack_require__(31),
-  contains: __webpack_require__(32),
-  dependencies: __webpack_require__(34),
-  'enum': __webpack_require__(35),
-  format: __webpack_require__(36),
-  'if': __webpack_require__(37),
-  items: __webpack_require__(39),
-  maximum: __webpack_require__(9),
-  minimum: __webpack_require__(9),
-  maxItems: __webpack_require__(10),
-  minItems: __webpack_require__(10),
-  maxLength: __webpack_require__(11),
-  minLength: __webpack_require__(11),
-  maxProperties: __webpack_require__(12),
-  minProperties: __webpack_require__(12),
-  multipleOf: __webpack_require__(40),
-  not: __webpack_require__(41),
-  oneOf: __webpack_require__(42),
-  pattern: __webpack_require__(43),
-  properties: __webpack_require__(44),
-  propertyNames: __webpack_require__(45),
-  required: __webpack_require__(47),
-  uniqueItems: __webpack_require__(48),
-  validate: __webpack_require__(13)
+  '$ref': __webpack_require__(48),
+  allOf: __webpack_require__(30),
+  anyOf: __webpack_require__(31),
+  '$comment': __webpack_require__(32),
+  const: __webpack_require__(33),
+  contains: __webpack_require__(34),
+  dependencies: __webpack_require__(36),
+  'enum': __webpack_require__(37),
+  format: __webpack_require__(38),
+  'if': __webpack_require__(39),
+  items: __webpack_require__(41),
+  maximum: __webpack_require__(10),
+  minimum: __webpack_require__(10),
+  maxItems: __webpack_require__(11),
+  minItems: __webpack_require__(11),
+  maxLength: __webpack_require__(12),
+  minLength: __webpack_require__(12),
+  maxProperties: __webpack_require__(13),
+  minProperties: __webpack_require__(13),
+  multipleOf: __webpack_require__(42),
+  not: __webpack_require__(43),
+  oneOf: __webpack_require__(44),
+  pattern: __webpack_require__(45),
+  properties: __webpack_require__(46),
+  propertyNames: __webpack_require__(47),
+  required: __webpack_require__(49),
+  uniqueItems: __webpack_require__(50),
+  validate: __webpack_require__(14)
 };
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6314,7 +6361,7 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6397,7 +6444,7 @@ module.exports = function generate_multipleOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6487,7 +6534,7 @@ module.exports = function generate_not(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6566,7 +6613,7 @@ module.exports = function generate_oneOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6647,7 +6694,7 @@ module.exports = function generate_pattern(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6982,7 +7029,7 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7070,7 +7117,7 @@ module.exports = function generate_propertyNames(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7200,7 +7247,7 @@ module.exports = function generate_ref(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7475,7 +7522,7 @@ module.exports = function generate_required(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7567,14 +7614,14 @@ module.exports = function generate_uniqueItems(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var IDENTIFIER = /^[a-z_$][a-z0-9_$-]*$/i;
-var customRuleCode = __webpack_require__(33);
+var customRuleCode = __webpack_require__(35);
 
 module.exports = {
   add: addKeyword,
@@ -7709,19 +7756,19 @@ function removeKeyword(keyword) {
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports) {
 
 module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","$id":"https://raw.githubusercontent.com/epoberezkin/ajv/master/lib/refs/data.json#","description":"Meta-schema for $data reference (JSON Schema extension proposal)","type":"object","required":["$data"],"properties":{"$data":{"type":"string","anyOf":[{"format":"relative-json-pointer"},{"format":"json-pointer"}]}},"additionalProperties":false}
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","$id":"http://json-schema.org/draft-07/schema#","title":"Core schema meta-schema","definitions":{"schemaArray":{"type":"array","minItems":1,"items":{"$ref":"#"}},"nonNegativeInteger":{"type":"integer","minimum":0},"nonNegativeIntegerDefault0":{"allOf":[{"$ref":"#/definitions/nonNegativeInteger"},{"default":0}]},"simpleTypes":{"enum":["array","boolean","integer","null","number","object","string"]},"stringArray":{"type":"array","items":{"type":"string"},"uniqueItems":true,"default":[]}},"type":["object","boolean"],"properties":{"$id":{"type":"string","format":"uri-reference"},"$schema":{"type":"string","format":"uri"},"$ref":{"type":"string","format":"uri-reference"},"$comment":{"type":"string"},"title":{"type":"string"},"description":{"type":"string"},"default":true,"readOnly":{"type":"boolean","default":false},"examples":{"type":"array","items":true},"multipleOf":{"type":"number","exclusiveMinimum":0},"maximum":{"type":"number"},"exclusiveMaximum":{"type":"number"},"minimum":{"type":"number"},"exclusiveMinimum":{"type":"number"},"maxLength":{"$ref":"#/definitions/nonNegativeInteger"},"minLength":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"pattern":{"type":"string","format":"regex"},"additionalItems":{"$ref":"#"},"items":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/schemaArray"}],"default":true},"maxItems":{"$ref":"#/definitions/nonNegativeInteger"},"minItems":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"uniqueItems":{"type":"boolean","default":false},"contains":{"$ref":"#"},"maxProperties":{"$ref":"#/definitions/nonNegativeInteger"},"minProperties":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"required":{"$ref":"#/definitions/stringArray"},"additionalProperties":{"$ref":"#"},"definitions":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"properties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"patternProperties":{"type":"object","additionalProperties":{"$ref":"#"},"propertyNames":{"format":"regex"},"default":{}},"dependencies":{"type":"object","additionalProperties":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/stringArray"}]}},"propertyNames":{"$ref":"#"},"const":true,"enum":{"type":"array","items":true,"minItems":1,"uniqueItems":true},"type":{"anyOf":[{"$ref":"#/definitions/simpleTypes"},{"type":"array","items":{"$ref":"#/definitions/simpleTypes"},"minItems":1,"uniqueItems":true}]},"format":{"type":"string"},"contentMediaType":{"type":"string"},"contentEncoding":{"type":"string"},"if":{"$ref":"#"},"then":{"$ref":"#"},"else":{"$ref":"#"},"allOf":{"$ref":"#/definitions/schemaArray"},"anyOf":{"$ref":"#/definitions/schemaArray"},"oneOf":{"$ref":"#/definitions/schemaArray"},"not":{"$ref":"#"}},"default":true}
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7809,35 +7856,35 @@ function escapeJsonPtr(str) {
 
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports) {
 
 module.exports = {"$schema":"http://json-schema.org/draft-04/schema#","type":"object","title":"shield-study-addon","description":"`shield-study-addon` addon-specific probe data, with `attributes` sent as Map(s,s).","properties":{"version":{"type":"integer","title":"Version schema.  Will be 3","enum":[3]},"study_name":{"description":"Name of a particular study.  Usually the addon_id.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"branch":{"description":"Which branch (variation) of the study the user has.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"addon_version":{"description":"Semantic version of the addon.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"shield_version":{"description":"Which version of the shield-studies-addon-utils.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"testing":{"type":"boolean","description":"If `true`, this packet is a TESTING packet and can be safely ignored."},"data":{"type":"object","title":"Shield-Study-Addon 'data' field.","description":"`shield-study-addon` addon-specific probe data, with `attributes` sent as Map(s,s).","properties":{"attributes":{"type":"object","description":"Map(string, string) of attributes.","properties":{},"additionalProperties":{"type":"string"}}},"required":["attributes"]},"type":{"type":"string","description":"doc_type, restated","enum":["shield-study-addon"]}},"required":["version","study_name","branch","addon_version","shield_version","data","type"]}
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports) {
 
 module.exports = {"$schema":"http://json-schema.org/draft-04/schema#","type":"object","title":"shield-study-error","description":"`shield-study-error` data used to notify, group and count some kinds of errors from shield studies.","properties":{"version":{"type":"integer","title":"Version schema.  Will be 3","enum":[3]},"study_name":{"description":"Name of a particular study.  Usually the addon_id.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"branch":{"description":"Which branch (variation) of the study the user has.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"addon_version":{"description":"Semantic version of the addon.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"shield_version":{"description":"Which version of the shield-studies-addon-utils.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"testing":{"type":"boolean","description":"If `true`, this packet is a TESTING packet and can be safely ignored."},"data":{"type":"object","title":"Shield-Study-Error 'data' field","description":"`shield-study-error` data used to notify, group and count some kinds of errors from shield studies.","properties":{"error_id":{"description":"between 1,100 chars, no spaces, unicode ok.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"error_source":{"type":"string","description":"Where did the error originate.","enum":["addon","shield","firefox","unknown"]},"message":{"type":"string","minLength":1,"title":"Message schema.","description":"String of an error message."},"severity":{"type":"string","description":"An explanation about the purpose of this instance.","enum":["debug","info","warn","fatal","impossible"]},"attributes":{"type":"object","description":"Map(string, string) of attributes.","properties":{},"additionalProperties":{"type":"string"}},"error":{"type":"object","description":"(Future use), things like tracebacks.","properties":{},"additionalProperties":{"type":"string"}}},"required":["error_id","error_source"]},"type":{"type":"string","description":"doc_type, restated","enum":["shield-study-error"]}},"required":["version","study_name","branch","addon_version","shield_version","data","type"]}
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports) {
 
 module.exports = {"$schema":"http://json-schema.org/draft-04/schema#","type":"object","title":"shield-study","description":"`shield-study` state and outcome data.","properties":{"version":{"type":"integer","title":"Version schema.  Will be 3","enum":[3]},"study_name":{"description":"Name of a particular study.  Usually the addon_id.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"branch":{"description":"Which branch (variation) of the study the user has.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"addon_version":{"description":"Semantic version of the addon.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"shield_version":{"description":"Which version of the shield-studies-addon-utils.","type":"string","pattern":"^\\S+$","minLength":1,"maxLength":100},"testing":{"type":"boolean","description":"If `true`, this packet is a TESTING packet and can be safely ignored."},"data":{"type":"object","description":"`shield-study` state and outcome data.","properties":{"study_state":{"type":"string","description":"message about the most recent state of the study.","enum":["enter","exit","installed","ineligible","expired","user-disable","ended-positive","ended-neutral","ended-negative","active"]},"study_state_fullname":{"type":"string","description":"Second part of name of state, if any.  Study-specific for study-defined endings."},"attributes":{"type":"object","description":"Map(string, string) of attributes.","properties":{},"additionalProperties":{"type":"string"}}},"required":["study_state"]},"type":{"type":"string","description":"doc_type, restated","enum":["shield-study"]}},"required":["version","study_name","branch","addon_version","shield_version","data","type"]}
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__uri__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schemes_http__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__schemes_https__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__schemes_mailto__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__schemes_urn__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__schemes_urn_uuid__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schemes_http__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__schemes_https__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__schemes_mailto__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__schemes_urn__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__schemes_urn_uuid__ = __webpack_require__(62);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "SCHEMES", function() { return __WEBPACK_IMPORTED_MODULE_0__uri__["a"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "pctEncChar", function() { return __WEBPACK_IMPORTED_MODULE_0__uri__["b"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "pctDecChars", function() { return __WEBPACK_IMPORTED_MODULE_0__uri__["c"]; });
@@ -7865,21 +7912,21 @@ __WEBPACK_IMPORTED_MODULE_0__uri__["a" /* SCHEMES */][__WEBPACK_IMPORTED_MODULE_
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__regexps_uri__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__regexps_uri__ = __webpack_require__(18);
 
 /* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__regexps_uri__["b" /* buildExps */])(true));
 //# sourceMappingURL=regexps-iri.js.map
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__http__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__http__ = __webpack_require__(19);
 
 const handler = {
     scheme: "https",
@@ -7891,12 +7938,12 @@ const handler = {
 //# sourceMappingURL=https.js.map
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__uri__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_punycode__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_punycode__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_punycode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_punycode__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(5);
 
@@ -8049,7 +8096,7 @@ const handler = {
 //# sourceMappingURL=mailto.js.map
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8078,7 +8125,7 @@ const handler = {
 //# sourceMappingURL=urn-uuid.js.map
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8134,7 +8181,7 @@ const handler = {
 //# sourceMappingURL=urn.js.map
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports) {
 
 var g;
@@ -8161,7 +8208,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -8189,24 +8236,26 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 64 */
-/***/ (function(module, exports) {
-
-module.exports = {"name":"shield-studies-addon-utils","description":"Utilities for building Shield-Study Mozilla Firefox add-ons.","version":"5.0.3","author":"Mozilla","bin":{"copyStudyUtils":"bin/copyStudyUtils.js"},"bugs":{"url":"https://github.com/mozilla/shield-studies-addon-utils/issues"},"dependencies":{"ajv":"^6.5.0","commander":"^2.15.1","fs-extra":"^6.0.1","shield-study-schemas":"^0.8.3"},"devDependencies":{"assert":"^1.4.1","doctoc":"^1.3.1","eslint":"4.19.1","eslint-plugin-json":"^1.2.0","eslint-plugin-mozilla":"^0.13.0","eslint-plugin-no-unsanitized":"^3.0.2","fixpack":"^2.3.1","fx-runner":"^1.0.9","geckodriver":"^1.11.0","get-firefox":"^2.1.0","mocha":"^5.2.0","npm-run-all":"^4.1.2","pre-commit":"^1.2.2","prettier":"^1.11.0","selenium-webdriver":"^3.6.0","web-ext":"^2.7.0","webpack":"^2.6.1","yamljs":"^0.3.0"},"engines":{"npm":"^6.1.0"},"files":["bin/copyStudyUtils.js","testUtils","webExtensionApis/study/api.js","webExtensionApis/study/schema.json","webExtensionApis/study/src/telemetry.js","weeUtils/documentSchema.js","weeUtils/generateStubApi.js","weeUtils/verifyWeeSchema.js","weeUtils/wee-schema-schema.json"],"homepage":"https://github.com/mozilla/shield-studies-addon-utils#readme","keywords":["addon","jsm","mozilla","normandy","shield","shield-study"],"license":"MPL-2.0","main":"src/index.js","pre-commit":["format"],"repository":{"type":"git","url":"git://github.com/mozilla/shield-studies-addon-utils.git"},"scripts":{"build":"npm run generate && cd webExtensionApis/study && webpack","clean":"rm -rf examples/*/{src/privileged/,dist/}","docformat":"doctoc --title '**Contents**' docs/*.md && prettier '**/*.md' --write","eslint":"eslint . --ext js --ext json","eslint-fix":"npm run eslint -- --fix","fast-build":"npm run-all build:*  # no pre and post checks","format":"prettier '**/*.{css,js,jsm,json,md}' --trailing-comma=all --ignore-path=.eslintignore --write","generate":"npm-run-all -s -n generate:schema:* generate:docs:* generate:stubApi:*","generate:docs:study":"cd webExtensionApis/study && node ../../weeUtils/documentSchema.js schema.json > api.md","generate:schema:study":"cd webExtensionApis/study && yaml2json schema.yaml -p > schema.json && node ../../weeUtils/verifyWeeSchema.js schema.json","generate:stubApi:study":"cd webExtensionApis/study && node ../../weeUtils/generateStubApi.js ./schema.json > stubApi.js","lint":"npm-run-all lint:*","lint:eslint":"npm run eslint","lint:fixpack":"fixpack  # cleans up package.json","postbuild":"if [ -z ${SKIPLINT} ]; then npm run format; fi","postformat":"run-p lint:fixpack eslint-fix","prebuild":"if [ -z ${SKIPLINT} ]; then npm run lint; fi","prepare":"export SKIPLINT=1 && fixpack && npm run build","pretest":"npm run build && npm run test-addon:bundle-utils && npm run test-addon:build","pretest-addon":"npm run pretest","small-study":"cd examples/small-study && npm run rebuild && npm start","test":"npm run test-only","test-addon":"cd test-addon && web-ext run --no-reload","test-addon:build":"cd test-addon && web-ext build","test-addon:bundle-utils":"./bin/copyStudyUtils.js test-addon/src/privileged","test-only":"FIREFOX_BINARY=${FIREFOX_BINARY:-nightly} ADDON_ZIP=test-addon/dist/shield_utils_test_add-on-1.0.0.zip mocha test/functional/ --bail"}}
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports) {
-
-module.exports = [{"namespace":"study","description":"Interface for Shield and Pioneer studies.","apiVersion":5,"types":[{"id":"NullableString","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"string"}],"choices":[{"type":"null"},{"type":"string"}],"testcases":[null,"a string"]},{"id":"NullableInteger","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"integer"}],"choices":[{"type":"null"},{"type":"integer"}],"testcases":[null,1234567890],"failcases":["1234567890",[]]},{"id":"NullableNumber","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"number"}],"choices":[{"type":"null"},{"type":"number"}],"testcases":[null,1234567890,1234567890.123],"failcases":["1234567890","1234567890.123",[]]},{"id":"studyTypesEnum","$schema":"http://json-schema.org/draft-04/schema","type":"string","enum":["shield","pioneer"],"testcases":["shield","pioneer"],"failcases":["foo"]},{"id":"weightedVariationObject","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"name":{"type":"string"},"weight":{"type":"number","minimum":0}},"required":["name","weight"],"testcase":{"name":"feature-active","weight":1.5}},{"id":"weightedVariationsArray","$schema":"http://json-schema.org/draft-04/schema","type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"weight":{"type":"number","minimum":0}},"required":["name","weight"]},"testcase":[{"name":"feature-active","weight":1.5},{"name":"feature-inactive","weight":1.5}]},{"id":"anEndingRequest","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"fullname":{"$ref":"NullableString","optional":true},"category":{"oneOf":[{"type":"null"},{"type":"string","enum":["ended-positive","ended-neutral","ended-negative"]}],"choices":[{"type":"null"},{"type":"string","enum":["ended-positive","ended-neutral","ended-negative"]}],"optional":true},"baseUrls":{"oneOf":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"choices":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"optional":true,"default":[]},"exacturls":{"oneOf":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"choices":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"optional":"true\ndefault: []"}},"additionalProperties":true,"testcases":[{"baseUrls":["some.url"],"fullname":"anEnding","category":"ended-positive"},{},{"baseUrls":["some.url"]},{"baseUrls":[],"fullname":null,"category":null}],"failcases":[{"baseUrls":null,"category":"not okay"}]},{"id":"onEndStudyResponse","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"fields":{"type":"object","additionalProperties":true},"urls":{"type":"array","items":{"type":"string"}}}},{"id":"studyInfoObject","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true,"properties":{"variation":{"$ref":"weightedVariationObject"},"firstRunTimestamp":{"$ref":"NullableInteger"},"activeExperimentName":{"type":"string"},"delayInMinutes":{"$ref":"NullableNumber"},"isFirstRun":{"type":"boolean"}},"required":["variation","firstRunTimestamp","activeExperimentName","isFirstRun"]},{"id":"studySetup","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"activeExperimentName":{"type":"string"},"studyType":{"$ref":"studyTypesEnum"},"expire":{"type":"object","properties":{"days":{"type":"integer"}},"optional":true,"additionalProperties":false},"endings":{"type":"object","additionalProperties":{"$ref":"anEndingRequest"}},"weightedVariations":{"$ref":"weightedVariationsArray"},"telemetry":{"type":"object","properties":{"send":{"type":"boolean"},"removeTestingFlag":{"type":"boolean"}}},"testing":{"type":"object","properties":{"variationName":{"$ref":"NullableString","optional":true},"firstRunTimestamp":{"$ref":"NullableInteger","optional":true},"expired":{"choices":[{"type":"null"},{"type":"boolean"}],"oneOf":[{"type":"null"},{"type":"boolean"}],"optional":true}},"additionalProperties":false,"optional":true}},"required":["activeExperimentName","studyType","endings","weightedVariations","telemetry"],"additionalProperties":true,"testcases":[{"activeExperimentName":"aStudy","studyType":"shield","expire":{"days":10},"endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":false}},{"activeExperimentName":"aStudy","studyType":"shield","expire":{"days":10},"endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":false},"testing":{"variationName":"something","firstRunTimestamp":1234567890,"expired":true}},{"activeExperimentName":"aStudy","studyType":"pioneer","endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":true},"testing":{"variationName":"something","firstRunTimestamp":1234567890,"expired":true}},{"activeExperimentName":"shield-utils-test-addon@shield.mozilla.org","studyType":"shield","telemetry":{"send":true,"removeTestingFlag":false},"endings":{"user-disable":{"baseUrls":["http://www.example.com/?reason=user-disable"]},"ineligible":{"baseUrls":["http://www.example.com/?reason=ineligible"]},"expired":{"baseUrls":["http://www.example.com/?reason=expired"]},"some-study-defined-ending":{"category":"ended-neutral"},"some-study-defined-ending-with-survey-url":{"baseUrls":["http://www.example.com/?reason=some-study-defined-ending-with-survey-url"],"category":"ended-negative"}},"weightedVariations":[{"name":"feature-active","weight":1.5},{"name":"feature-passive","weight":1.5},{"name":"control","weight":1}],"expire":{"days":14},"testing":{},"allowEnroll":true}]},{"id":"telemetryPayload","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true,"testcase":{"foo":"bar"}},{"id":"searchTelemetryQuery","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"type":{"type":["array"],"items":{"type":"string"},"optional":true},"n":{"type":"integer","optional":true},"minimumTimestamp":{"type":"number","optional":true},"headersOnly":{"type":"boolean","optional":true}},"additionalProperties":false,"testcase":{"type":["shield-study-addon","shield-study"],"n":100,"minimumTimestamp":1523968204184,"headersOnly":false}},{"id":"anEndingAnswer","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true}],"functions":[{"name":"setup","type":"function","async":true,"description":"Attempt an setup/enrollment, with these effects:\n\n- sets 'studyType' as Shield or Pioneer\n  - affects telemetry\n  - (5.1 TODO) watches for dataPermission changes that should *always*\n    stop that kind of study\n\n- Use or choose variation\n  - `testing.variation` if present\n  - OR (internal) deterministicVariation\n    from `weightedVariations`\n    based on hash of\n\n    - activeExperimentName\n    - clientId\n\n- During firstRun[1] only:\n  - set firstRunTimestamp pref value\n  - send 'enter' ping\n  - if `allowEnroll`, send 'install' ping\n  - else endStudy(\"ineligible\") and return\n\n- Every Run\n  - setActiveExperiment(studySetup)\n  - monitor shield | pioneer permission endings\n  - suggests alarming if `expire` is set.\n\nReturns:\n- studyInfo object (see `getStudyInfo`)\n\nTelemetry Sent (First run only)\n\n  - enter\n  - install\n\nFires Events\n\n(At most one of)\n- study:onReady  OR\n- study:onEndStudy\n\nPreferences set\n- `shield.${runtime.id}.firstRunTimestamp`\n\nNote:\n1. allowEnroll is ONLY used during first run (install)\n","parameters":[{"name":"studySetup","$ref":"studySetup"}],"returns":[{"$ref":"studyInfoObject"}]},{"name":"endStudy","type":"function","async":true,"defaultReturn":{"urls":["url1","url2"],"endingName":"some-reason"},"description":"Signal to browser.study that it should end.\n\nUsage scenarios:\n- addons defined\n  - postive endings (tried feature)\n  - negative endings (client clicked 'no thanks')\n  - expiration / timeout (feature should last for 14 days then uninstall)\n\nLogic:\n- If study has already ended, do nothing.\n- Else: END\n\nEND:\n- record internally that study is ended.\n- disable all methods that rely on configuration / setup.\n- clear all prefs stored by `browser.study`\n- fire telemetry pings for:\n  - 'exit'\n  - the ending, one of:\n\n    \"ineligible\",\n    \"expired\",\n    \"user-disable\",\n    \"ended-positive\",\n    \"ended-neutral\",\n    \"ended-negative\",\n\n- augment all ending urls with query urls\n- fire 'study:end' event to `browser.study.onEndStudy` handlers.\n\nAddon should then do\n- open returned urls\n- feature specific cleanup\n- uninstall the addon\n\nNote:\n1.  calling this function multiple time is safe.\n`browser.study` will choose the\n","parameters":[{"name":"anEndingAlias","type":"string"}],"returns":[{"$ref":"anEndingAnswer"}]},{"name":"getStudyInfo","type":"function","async":true,"description":"current study configuration, including\n- variation\n- activeExperimentName\n- delayInMinutes\n- firstRunTimestamp\n- isFirstRun\n\nBut not:\n- telemetry clientId\n\nThrows Error if called before `browser.study.setup`\n","defaultReturn":{"variation":"styleA","firstRunTimestamp":1523968204184,"activeExperimentName":"some experiment","delayInMinutes":12},"parameters":[],"returns":[{"$ref":"studyInfoObject"}]},{"name":"sendTelemetry","type":"function","description":"Send Telemetry using appropriate shield or pioneer methods.\n\nshield:\n- `shield-study-addon` ping, requires object string keys and string values\n\npioneer:\n- TBD\n\nNote:\n- no conversions / coercion of data happens.\n\nNote:\n- undefined what happens if validation fails\n- undefined what happens when you try to send 'shield' from 'pioneer'\n\nTBD fix the parameters here.\n","async":true,"parameters":[{"name":"payload","$ref":"telemetryPayload"}],"defaultReturn":"undefined","returns":null},{"name":"searchSentTelemetry","type":"function","async":true,"description":"Search locally stored telemetry pings using these fields (if set)\n\nn:\n  if set, no more than `n` pings.\ntype:\n  Array of 'ping types' (e.g., main, crash, shield-study-addon) to filter\nminimumTimestamp:\n  only pings after this timestamp.\nheadersOnly:\n  boolean.  If true, only the 'headers' will be returned.\n\nPings will be returned sorted by timestamp with most recent first.\n\nUsage scenarios:\n- enrollment / eligiblity using recent Telemetry behaviours or client environment\n- addon testing scenarios\n","defaultReturn":[{"pingType":"main"}],"parameters":[{"name":"searchTelemetryQuery","$ref":"searchTelemetryQuery"}]},{"name":"validateJSON","type":"function","async":true,"defaultReturn":{"valid":true,"errors":[]},"description":"Using AJV, do jsonschema validation of an object.  Can be used to validate your arguments, packets at client.","parameters":[{"name":"someJson","type":"object","additionalProperties":true},{"name":"jsonschema","type":"object","descripton":"a valid jsonschema object","additionalProperties":true}],"returns":[{"type":"object"},{"parameters":null,"valid":[{"type":"boolean"}],"errors":[{"type":"array"}]}]}],"events":[{"name":"onReady","type":"function","defaultReturn":{"variation":"styleA","firstRunTimestamp":1523968204184},"description":"Fires when the study is 'ready' for the feature to startup.","parameters":[{"name":"studyInfo","type":"object"}]},{"name":"onEndStudy","type":"function","defaultReturn":{"urls":[],"reason":"some-reason"},"description":"Listen for when the study wants to end.\n\nAct on it by\n- opening surveyUrls\n- tearing down your feature\n- uninstalling the addon\n","parameters":[{"name":"ending","type":"object"}]}]},{"namespace":"studyDebug","description":"Interface for Test Utilities","apiVersion":5,"functions":[{"name":"throwAnException","type":"function","description":"Throws an exception from a privileged function - for making sure that we can catch these in our web extension","async":false,"parameters":[{"name":"message","type":"string"}]},{"name":"throwAnExceptionAsync","type":"function","description":"Throws an exception from a privileged async function - for making sure that we can catch these in our web extension","async":true,"parameters":[{"name":"message","type":"string"}]},{"name":"firstSeen","type":"function","async":true,"description":"","parameters":[]},{"name":"setActive","type":"function","async":true,"description":"","parameters":[]},{"name":"startup","type":"function","async":true,"description":"","parameters":[{"name":"details","type":"object","additionalProperties":true}]},{"name":"setFirstRunTimestamp","type":"function","async":true,"description":"Set the pref for firstRunTimestamp, to simulate:\n- 2nd run\n- other useful tests around expiration and states.\n","parameters":[{"name":"timestamp","type":"number","minimum":1}]},{"name":"reset","type":"function","async":true,"description":"\nReset the studyUtils _internals, for debugging purposes.\n","parameters":[]},{"name":"getInternals","type":"function","async":true,"description":"Return `_internals` of the studyUtils object.\n\nUse this for debugging state.\n\nAbout `this._internals`:\n- variation:  (chosen variation, `setup` )\n- isEnding: bool  `endStudy`\n- isSetup: bool   `setup`\n- isFirstRun: bool `setup`, based on pref\n- studySetup: bool  `setup` the config\n- seenTelemetry: object of lists of seen telemetry by bucket\n- prefs: object of all created prefs and their names\n","parameters":[]}]}]
-
-/***/ }),
 /* 66 */
+/***/ (function(module, exports) {
+
+module.exports = {"name":"shield-studies-addon-utils","description":"Utilities for building Shield-Study Mozilla Firefox add-ons.","version":"5.1.0","author":"Mozilla","bin":{"copyStudyUtils":"bin/copyStudyUtils.js"},"bugs":{"url":"https://github.com/mozilla/shield-studies-addon-utils/issues"},"dependencies":{"ajv":"^6.5.0","commander":"^2.15.1","fs-extra":"^6.0.1","shield-study-schemas":"^0.8.3"},"devDependencies":{"assert":"^1.4.1","doctoc":"^1.3.1","eslint":"4.19.1","eslint-plugin-json":"^1.2.0","eslint-plugin-mozilla":"^0.13.0","eslint-plugin-no-unsanitized":"^3.0.2","fixpack":"^2.3.1","fx-runner":"^1.0.9","geckodriver":"^1.12.2","get-firefox":"^2.1.0","mocha":"^5.2.0","npm-run-all":"^4.1.2","pre-commit":"^1.2.2","prettier":"^1.11.0","selenium-webdriver":"^3.6.0","web-ext":"^2.7.0","webext-experiment-utils":"github:mozilla/webext-experiment-utils#23c4cd0c056695aefd10de1d74024f0211d2b758","webpack":"^2.6.1","yamljs":"^0.3.0"},"engines":{"npm":"^6.1.0"},"files":["bin/copyStudyUtils.js","testUtils","webExtensionApis/study/api.js","webExtensionApis/study/schema.json","webExtensionApis/study/src/telemetry.js","weeUtils/documentSchema.js","weeUtils/generateStubApi.js","weeUtils/verifyWeeSchema.js","weeUtils/wee-schema-schema.json"],"homepage":"https://github.com/mozilla/shield-studies-addon-utils#readme","keywords":["addon","mozilla","normandy","shield","shield-study"],"license":"MPL-2.0","main":"src/index.js","pre-commit":["format"],"repository":{"type":"git","url":"git://github.com/mozilla/shield-studies-addon-utils.git"},"scripts":{"build":"npm run generate && cd webExtensionApis/study && webpack","clean":"rm -rf examples/*/{src/privileged/,dist/}","docformat":"doctoc --title '**Contents**' docs/*.md && prettier '**/*.md' --write","eslint":"eslint . --ext js --ext json","eslint-fix":"npm run eslint -- --fix","fast-build":"npm run-all build:*  # no pre and post checks","format":"prettier '**/*.{css,js,jsm,json,md}' --trailing-comma=all --ignore-path=.eslintignore --write","generate":"npm-run-all -s -n generate:generateSchema:* generate:verifyWeeSchema:* generate:documentSchema:* generate:generateStubApi:*","generate:documentSchema:study":"cd webExtensionApis/study && documentSchema schema.json > api.md","generate:generateSchema:study":"cd webExtensionApis/study && yaml2json schema.yaml -p > schema.json","generate:generateStubApi:study":"cd webExtensionApis/study && generateStubApi ./schema.json > stubApi.js","generate:verifyWeeSchema:study":"cd webExtensionApis/study && verifyWeeSchema schema.json","lint":"npm-run-all lint:*","lint:eslint":"npm run eslint","lint:fixpack":"fixpack  # cleans up package.json","postbuild":"if [ -z ${SKIPLINT} ]; then npm run format; fi","postformat":"run-p lint:fixpack eslint-fix","prebuild":"if [ -z ${SKIPLINT} ]; then npm run lint; fi","prepare":"export SKIPLINT=1 && fixpack && npm run build","pretest":"npm run build && npm run test-addon:bundle-utils && npm run test-addon:build","pretest-addon":"npm run pretest","small-study":"cd examples/small-study && npm run rebuild && npm start","test":"npm run test:func","test-addon":"cd test-addon && web-ext run --no-reload","test-addon:build":"cd test-addon && web-ext build","test-addon:bundle-utils":"./bin/copyStudyUtils.js test-addon/src/privileged","test:func":"npm-run-all -pr test:func:*","test:func:selenium-mocha":"FIREFOX_BINARY=${FIREFOX_BINARY:-nightly} ADDON_ZIP=test-addon/dist/shield_utils_test_add-on-1.0.0.zip GECKODRIVER_URL=http://127.0.0.1:4444 mocha test/functional/ --bail --full-trace","test:func:start-geckodriver-server":"geckodriver -vv 1> test/results/logs/geckodriver.log 2> test/results/logs/geckodriver.errors.log"}}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports) {
+
+module.exports = [{"namespace":"study","description":"Interface for Shield and Pioneer studies.","apiVersion":5,"types":[{"id":"NullableString","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"string"}],"choices":[{"type":"null"},{"type":"string"}],"testcases":[null,"a string"]},{"id":"NullableInteger","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"integer"}],"choices":[{"type":"null"},{"type":"integer"}],"testcases":[null,1234567890],"failcases":["1234567890",[]]},{"id":"NullableNumber","$schema":"http://json-schema.org/draft-04/schema","oneOf":[{"type":"null"},{"type":"number"}],"choices":[{"type":"null"},{"type":"number"}],"testcases":[null,1234567890,1234567890.123],"failcases":["1234567890","1234567890.123",[]]},{"id":"studyTypesEnum","$schema":"http://json-schema.org/draft-04/schema","type":"string","enum":["shield","pioneer"],"testcases":["shield","pioneer"],"failcases":["foo"]},{"id":"weightedVariationObject","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"name":{"type":"string"},"weight":{"type":"number","minimum":0}},"required":["name","weight"],"testcase":{"name":"feature-active","weight":1.5}},{"id":"weightedVariationsArray","$schema":"http://json-schema.org/draft-04/schema","type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"weight":{"type":"number","minimum":0}},"required":["name","weight"]},"testcase":[{"name":"feature-active","weight":1.5},{"name":"feature-inactive","weight":1.5}]},{"id":"anEndingRequest","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"fullname":{"$ref":"NullableString","optional":true},"category":{"oneOf":[{"type":"null"},{"type":"string","enum":["ended-positive","ended-neutral","ended-negative"]}],"choices":[{"type":"null"},{"type":"string","enum":["ended-positive","ended-neutral","ended-negative"]}],"optional":true},"baseUrls":{"oneOf":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"choices":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"optional":true,"default":[]},"exacturls":{"oneOf":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"choices":[{"type":"null"},{"type":"array","items":{"type":"string"}}],"optional":"true\ndefault: []"}},"additionalProperties":true,"testcases":[{"baseUrls":["some.url"],"fullname":"anEnding","category":"ended-positive"},{},{"baseUrls":["some.url"]},{"baseUrls":[],"fullname":null,"category":null}],"failcases":[{"baseUrls":null,"category":"not okay"}]},{"id":"onEndStudyResponse","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"fields":{"type":"object","additionalProperties":true},"urls":{"type":"array","items":{"type":"string"}}}},{"id":"studyInfoObject","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true,"properties":{"variation":{"$ref":"weightedVariationObject"},"firstRunTimestamp":{"$ref":"NullableInteger"},"activeExperimentName":{"type":"string"},"delayInMinutes":{"$ref":"NullableNumber"},"isFirstRun":{"type":"boolean"}},"required":["variation","firstRunTimestamp","activeExperimentName","isFirstRun"]},{"id":"studySetup","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"activeExperimentName":{"type":"string"},"studyType":{"$ref":"studyTypesEnum"},"expire":{"type":"object","properties":{"days":{"type":"integer"}},"optional":true,"additionalProperties":false},"endings":{"type":"object","additionalProperties":{"$ref":"anEndingRequest"}},"weightedVariations":{"$ref":"weightedVariationsArray"},"telemetry":{"type":"object","properties":{"send":{"type":"boolean"},"removeTestingFlag":{"type":"boolean"}}},"testing":{"type":"object","properties":{"variationName":{"$ref":"NullableString","optional":true},"firstRunTimestamp":{"$ref":"NullableInteger","optional":true},"expired":{"choices":[{"type":"null"},{"type":"boolean"}],"oneOf":[{"type":"null"},{"type":"boolean"}],"optional":true}},"additionalProperties":false,"optional":true}},"required":["activeExperimentName","studyType","endings","weightedVariations","telemetry"],"additionalProperties":true,"testcases":[{"activeExperimentName":"aStudy","studyType":"shield","expire":{"days":10},"endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":false}},{"activeExperimentName":"aStudy","studyType":"shield","expire":{"days":10},"endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":false},"testing":{"variationName":"something","firstRunTimestamp":1234567890,"expired":true}},{"activeExperimentName":"aStudy","studyType":"pioneer","endings":{"anEnding":{"baseUrls":["some.url"]}},"weightedVariations":[{"name":"feature-active","weight":1.5}],"telemetry":{"send":false,"removeTestingFlag":true},"testing":{"variationName":"something","firstRunTimestamp":1234567890,"expired":true}},{"activeExperimentName":"shield-utils-test-addon@shield.mozilla.org","studyType":"shield","telemetry":{"send":true,"removeTestingFlag":false},"endings":{"user-disable":{"baseUrls":["http://www.example.com/?reason=user-disable"]},"ineligible":{"baseUrls":["http://www.example.com/?reason=ineligible"]},"expired":{"baseUrls":["http://www.example.com/?reason=expired"]},"some-study-defined-ending":{"category":"ended-neutral"},"some-study-defined-ending-with-survey-url":{"baseUrls":["http://www.example.com/?reason=some-study-defined-ending-with-survey-url"],"category":"ended-negative"}},"weightedVariations":[{"name":"feature-active","weight":1.5},{"name":"feature-passive","weight":1.5},{"name":"control","weight":1}],"expire":{"days":14},"testing":{},"allowEnroll":true}]},{"id":"telemetryPayload","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true,"testcase":{"foo":"bar"}},{"id":"searchTelemetryQuery","$schema":"http://json-schema.org/draft-04/schema","type":"object","properties":{"type":{"type":["array"],"items":{"type":"string"},"optional":true},"n":{"type":"integer","optional":true},"minimumTimestamp":{"type":"number","optional":true},"headersOnly":{"type":"boolean","optional":true}},"additionalProperties":false,"testcase":{"type":["shield-study-addon","shield-study"],"n":100,"minimumTimestamp":1523968204184,"headersOnly":false}},{"id":"anEndingAnswer","$schema":"http://json-schema.org/draft-04/schema","type":"object","additionalProperties":true}],"functions":[{"name":"setup","type":"function","async":true,"description":"Attempt an setup/enrollment, with these effects:\n\n- sets 'studyType' as Shield or Pioneer\n  - affects telemetry\n  - (5.1 TODO) watches for dataPermission changes that should *always*\n    stop that kind of study\n\n- Use or choose variation\n  - `testing.variation` if present\n  - OR (internal) deterministicVariation\n    from `weightedVariations`\n    based on hash of\n\n    - activeExperimentName\n    - clientId\n\n- During firstRun[1] only:\n  - set firstRunTimestamp pref value\n  - send 'enter' ping\n  - if `allowEnroll`, send 'install' ping\n  - else endStudy(\"ineligible\") and return\n\n- Every Run\n  - setActiveExperiment(studySetup)\n  - monitor shield | pioneer permission endings\n  - suggests alarming if `expire` is set.\n\nReturns:\n- studyInfo object (see `getStudyInfo`)\n\nTelemetry Sent (First run only)\n\n  - enter\n  - install\n\nFires Events\n\n(At most one of)\n- study:onReady  OR\n- study:onEndStudy\n\nPreferences set\n- `shield.${runtime.id}.firstRunTimestamp`\n\nNote:\n1. allowEnroll is ONLY used during first run (install)\n","parameters":[{"name":"studySetup","$ref":"studySetup"}],"returns":[{"$ref":"studyInfoObject"}]},{"name":"endStudy","type":"function","async":true,"defaultReturn":{"urls":["url1","url2"],"endingName":"some-reason"},"description":"Signal to browser.study that it should end.\n\nUsage scenarios:\n- addons defined\n  - postive endings (tried feature)\n  - negative endings (client clicked 'no thanks')\n  - expiration / timeout (feature should last for 14 days then uninstall)\n\nLogic:\n- If study has already ended, do nothing.\n- Else: END\n\nEND:\n- record internally that study is ended.\n- disable all methods that rely on configuration / setup.\n- clear all prefs stored by `browser.study`\n- fire telemetry pings for:\n  - 'exit'\n  - the ending, one of:\n\n    \"ineligible\",\n    \"expired\",\n    \"user-disable\",\n    \"ended-positive\",\n    \"ended-neutral\",\n    \"ended-negative\",\n\n- augment all ending urls with query urls\n- fire 'study:end' event to `browser.study.onEndStudy` handlers.\n\nAddon should then do\n- open returned urls\n- feature specific cleanup\n- uninstall the addon\n\nNote:\n1.  calling this function multiple time is safe.\n`browser.study` will choose the\n","parameters":[{"name":"anEndingAlias","type":"string"}],"returns":[{"$ref":"anEndingAnswer"}]},{"name":"getStudyInfo","type":"function","async":true,"description":"current study configuration, including\n- variation\n- activeExperimentName\n- delayInMinutes\n- firstRunTimestamp\n- isFirstRun\n\nBut not:\n- telemetry clientId\n\nThrows Error if called before `browser.study.setup`\n","defaultReturn":{"variation":"styleA","firstRunTimestamp":1523968204184,"activeExperimentName":"some experiment","delayInMinutes":12},"parameters":[],"returns":[{"$ref":"studyInfoObject"}]},{"name":"sendTelemetry","type":"function","description":"Send Telemetry using appropriate shield or pioneer methods.\n\nshield:\n- `shield-study-addon` ping, requires object string keys and string values\n\npioneer:\n- TBD\n\nNote:\n- no conversions / coercion of data happens.\n\nNote:\n- undefined what happens if validation fails\n- undefined what happens when you try to send 'shield' from 'pioneer'\n\nTBD fix the parameters here.\n","async":true,"parameters":[{"name":"payload","$ref":"telemetryPayload"}],"defaultReturn":"undefined","returns":null},{"name":"searchSentTelemetry","type":"function","async":true,"description":"Search locally stored telemetry pings using these fields (if set)\n\nn:\n  if set, no more than `n` pings.\ntype:\n  Array of 'ping types' (e.g., main, crash, shield-study-addon) to filter\nminimumTimestamp:\n  only pings after this timestamp.\nheadersOnly:\n  boolean.  If true, only the 'headers' will be returned.\n\nPings will be returned sorted by timestamp with most recent first.\n\nUsage scenarios:\n- enrollment / eligiblity using recent Telemetry behaviours or client environment\n- addon testing scenarios\n","defaultReturn":[{"pingType":"main"}],"parameters":[{"name":"searchTelemetryQuery","$ref":"searchTelemetryQuery"}]},{"name":"getTestingOverrides","type":"function","async":true,"description":"Returns an object with the following keys:\n  variationName - to be able to test specific variations\n  firstRunTimestamp - to be able to test the expiration event\n  expired - to be able to test the behavior of an already expired study\nUsed to override study testing flags in getStudySetup().\nThe values are set by the corresponding preference under the `extensions.${widgetId}.test.*` preference branch.\n","parameters":[]},{"name":"validateJSON","type":"function","async":true,"defaultReturn":{"valid":true,"errors":[]},"description":"Using AJV, do jsonschema validation of an object.  Can be used to validate your arguments, packets at client.","parameters":[{"name":"someJson","type":"object","additionalProperties":true},{"name":"jsonschema","type":"object","descripton":"a valid jsonschema object","additionalProperties":true}],"returns":[{"type":"object"},{"parameters":null,"valid":[{"type":"boolean"}],"errors":[{"type":"array"}]}]}],"events":[{"name":"onReady","type":"function","defaultReturn":{"variation":"styleA","firstRunTimestamp":1523968204184},"description":"Fires when the study is 'ready' for the feature to startup.","parameters":[{"name":"studyInfo","type":"object"}]},{"name":"onEndStudy","type":"function","defaultReturn":{"urls":[],"reason":"some-reason"},"description":"Listen for when the study wants to end.\n\nAct on it by\n- opening surveyUrls\n- tearing down your feature\n- uninstalling the addon\n","parameters":[{"name":"ending","type":"object"}]}]},{"namespace":"study.logger","description":"For study developers to be able to log messages which are hidden by default but can\nbe displayed via a preference (not currently possible with avoid console.{info,log,debug,warn,error}).\nLog messages will be prefixed with the add-on's widget id and the log level is controlled by the\n`shieldStudy.logLevel` preference.\nNote that since there is no way to handle an arbitrarily variable number of arguments in the schema,\nall values to log needs to be sent as a single variable.\nUsage example: await browser.study.logger.log(\"foo\");\nUsage example (multiple things to log): await browser.study.logger.log([\"foo\", bar]);\n","functions":[{"name":"info","type":"function","async":true,"description":"Corresponds to console.info","parameters":[{"name":"values","type":"any"}]},{"name":"log","type":"function","async":true,"description":"Corresponds to console.log","parameters":[{"name":"values","type":"any"}]},{"name":"debug","type":"function","async":true,"description":"Corresponds to console.debug","parameters":[{"name":"values","type":"any"}]},{"name":"warn","type":"function","async":true,"description":"Corresponds to console.warn","parameters":[{"name":"values","type":"any"}]},{"name":"error","type":"function","async":true,"description":"Corresponds to console.error","parameters":[{"name":"values","type":"any"}]}]},{"namespace":"studyDebug","description":"Interface for Test Utilities","apiVersion":5,"functions":[{"name":"throwAnException","type":"function","description":"Throws an exception from a privileged function - for making sure that we can catch these in our web extension","async":false,"parameters":[{"name":"message","type":"string"}]},{"name":"throwAnExceptionAsync","type":"function","description":"Throws an exception from a privileged async function - for making sure that we can catch these in our web extension","async":true,"parameters":[{"name":"message","type":"string"}]},{"name":"firstSeen","type":"function","async":true,"description":"","parameters":[]},{"name":"setActive","type":"function","async":true,"description":"","parameters":[]},{"name":"startup","type":"function","async":true,"description":"","parameters":[{"name":"details","type":"object","additionalProperties":true}]},{"name":"setFirstRunTimestamp","type":"function","async":true,"description":"Set the pref for firstRunTimestamp, to simulate:\n- 2nd run\n- other useful tests around expiration and states.\n","parameters":[{"name":"timestamp","type":"number","minimum":1}]},{"name":"reset","type":"function","async":true,"description":"\nReset the studyUtils _internals, for debugging purposes.\n","parameters":[]},{"name":"getInternals","type":"function","async":true,"description":"Return `_internals` of the studyUtils object.\n\nUse this for debugging state.\n\nAbout `this._internals`:\n- variation:  (chosen variation, `setup` )\n- isEnding: bool  `endStudy`\n- isSetup: bool   `setup`\n- isFirstRun: bool `setup`, based on pref\n- studySetup: bool  `setup` the config\n- seenTelemetry: object of lists of seen telemetry by bucket\n- prefs: object of all created prefs and their names\n","parameters":[]}]}]
+
+/***/ }),
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__logger__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__makeWidgetId__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__testingOverrides__ = __webpack_require__(22);
 /* eslint-env commonjs */
 /* eslint no-logger: off */
 /* global ExtensionAPI */
@@ -8218,16 +8267,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
 ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm");
 ChromeUtils.import("resource://gre/modules/ExtensionUtils.jsm");
 
-__WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("loading web extension experiment study/api.js");
+__WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("loading web extension experiment study/api.js");
 
-// eslint-disable-next-line no-undef
+/* eslint-disable no-undef */
 const { EventManager } = ExtensionCommon;
-// eslint-disable-next-line no-undef
 const { ExtensionError } = ExtensionUtils;
-
 const EventEmitter =
   ExtensionCommon.EventEmitter || ExtensionUtils.EventEmitter;
 
@@ -8263,7 +8312,7 @@ this.study = class extends ExtensionAPI {
      */
     this.extension = extension;
     this.studyApiEventEmitter = new StudyApiEventEmitter();
-    __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("constructed!");
+    __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("constructed!");
   }
 
   /**
@@ -8279,12 +8328,12 @@ this.study = class extends ExtensionAPI {
    * @returns {undefined}
    */
   async onShutdown(shutdownReason) {
-    __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("possible uninstalling", shutdownReason);
+    __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("possible uninstalling", shutdownReason);
     if (
       shutdownReason === "ADDON_UNINSTALL" ||
       shutdownReason === "ADDON_DISABLE"
     ) {
-      __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("definitely uninstall | disable", shutdownReason);
+      __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("definitely uninstall | disable", shutdownReason);
       const anEndingAlias = "user-disable";
       const endingResponse = await this.studyUtils.endStudy(anEndingAlias);
       // See #194, getApi is already torn down, so cannot hear it.
@@ -8293,14 +8342,14 @@ this.study = class extends ExtensionAPI {
   }
 
   /**
-   * @param {object} context the addon context
+   * @param {object} context the add-on context
    * @returns {object} api with study, studyDebug keys
    */
   getAPI(context) {
     const { extension } = this;
 
     // Load studyUtils
-    const { studyUtils } = __webpack_require__(19);
+    const { studyUtils } = __webpack_require__(20);
 
     // Make studyUtils available for onShutdown handler
     this.studyUtils = studyUtils;
@@ -8312,8 +8361,12 @@ this.study = class extends ExtensionAPI {
     studyUtils.setExtensionManifest(extension.manifest);
     studyUtils._internals = studyUtils._createInternals();
 
+    // for add-on logging via browser.study.logger.log()
+    const widgetId = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__makeWidgetId__["a" /* default */])(extension.manifest.applications.gecko.id);
+    const addonLogger = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__logger__["b" /* createLogger */])(widgetId, `shieldStudy.logLevel`);
+
     async function endStudy(anEndingAlias) {
-      __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("called endStudy anEndingAlias");
+      __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("called endStudy anEndingAlias");
       const endingResponse = await studyUtils.endStudy(anEndingAlias);
       studyApiEventEmitter.emitEndStudy(endingResponse);
     }
@@ -8383,7 +8436,7 @@ this.study = class extends ExtensionAPI {
           // function when the study is initialized
           if (studyInfo.isFirstRun) {
             if (!studySetup.allowEnroll) {
-              __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("User is ineligible, ending study.");
+              __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("User is ineligible, ending study.");
               // 1. uses studySetup.endings.ineligible.url if any,
               // 2. sends UT for "ineligible"
               // 3. then uninstalls add-on
@@ -8393,7 +8446,7 @@ this.study = class extends ExtensionAPI {
           }
 
           if (studyInfo.delayInMinutes === 0) {
-            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("encountered already expired study");
+            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("encountered already expired study");
             await endStudy("expired");
             return studyUtils.info();
           }
@@ -8407,12 +8460,12 @@ this.study = class extends ExtensionAPI {
 
           // update what the study variation and other info is.
           studyInfo = studyUtils.info();
-          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug(`api info: ${JSON.stringify(studyInfo)}`);
+          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug(`api info: ${JSON.stringify(studyInfo)}`);
           try {
             studyApiEventEmitter.emitReady(studyInfo);
           } catch (e) {
-            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].error("browser.study.setup error");
-            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].error(e);
+            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].error("browser.study.setup error");
+            __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].error(e);
           }
           return studyUtils.info();
         },
@@ -8472,7 +8525,7 @@ this.study = class extends ExtensionAPI {
          *  Throws ExtensionError if called before `browser.study.setup`
          **/
         getStudyInfo: async function getStudyInfo() {
-          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("called getStudyInfo ");
+          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("called getStudyInfo ");
           return studyUtils.info();
         },
 
@@ -8497,7 +8550,7 @@ this.study = class extends ExtensionAPI {
          * @returns {undefined}
          */
         sendTelemetry: async function sendTelemetry(payload) {
-          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("called sendTelemetry payload");
+          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("called sendTelemetry payload");
 
           function throwIfInvalid(obj) {
             // Check: all keys and values must be strings,
@@ -8539,15 +8592,28 @@ this.study = class extends ExtensionAPI {
             "resource://gre/modules/TelemetryArchive.jsm",
             {},
           );
-          const { searchTelemetryArchive } = __webpack_require__(20);
+          const { searchTelemetryArchive } = __webpack_require__(21);
           return searchTelemetryArchive(TelemetryArchive, searchTelemetryQuery);
         },
 
         /* Using AJV, do jsonschema validation of an object.  Can be used to validate your arguments, packets at client. */
         validateJSON: async function validateJSON(someJson, jsonschema) {
-          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("called validateJSON someJson, jsonschema");
+          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].debug("called validateJSON someJson, jsonschema");
           return studyUtils.jsonschema.validate(someJson, jsonschema);
           // return { valid: true, errors: [] };
+        },
+
+        /* Returns an object with the following keys:
+    variationName - to be able to test specific variations
+    firstRunTimestamp - to be able to test the expiration event
+    expired - to be able to test the behavior of an already expired study
+  The values are set by the corresponding preference under the `extensions.${widgetId}.test.*` preference branch. */
+        getTestingOverrides: async function getTestingOverrides() {
+          __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* utilsLogger */].info(
+            "The preferences that can be used to override study testing flags: ",
+            __WEBPACK_IMPORTED_MODULE_2__testingOverrides__["a" /* listPreferences */](widgetId),
+          );
+          return __WEBPACK_IMPORTED_MODULE_2__testingOverrides__["b" /* getTestingOverrides */](widgetId);
         },
 
         /**
@@ -8583,6 +8649,33 @@ this.study = class extends ExtensionAPI {
             studyApiEventEmitter.off("endStudy", listener);
           };
         }).api(),
+
+        logger: {
+          /* Corresponds to console.info */
+          info: async function info(values) {
+            addonLogger.info(values);
+          },
+
+          /* Corresponds to console.log */
+          log: async function log(values) {
+            addonLogger.log(values);
+          },
+
+          /* Corresponds to console.debug */
+          debug: async function debug(values) {
+            addonLogger.debug(values);
+          },
+
+          /* Corresponds to console.warn */
+          warn: async function warn(values) {
+            addonLogger.warn(values);
+          },
+
+          /* Corresponds to console.error */
+          error: async function error(values) {
+            addonLogger.error(values);
+          },
+        },
       },
 
       studyDebug: {
@@ -8620,7 +8713,7 @@ this.study = class extends ExtensionAPI {
 
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8630,11 +8723,11 @@ this.study = class extends ExtensionAPI {
 
 ChromeUtils.import("resource://gre/modules/ExtensionUtils.jsm");
 
-const Ajv = __webpack_require__(7);
+const Ajv = __webpack_require__(8);
 const ajv = new Ajv({
   // important:  these options make ajv behave like 04, not draft-07
   schemaId: "auto", // id UNLESS $id is defined. (draft 5)
-  meta: __webpack_require__(14),
+  meta: __webpack_require__(15),
   validateSchema: false,
 });
 
@@ -8655,7 +8748,7 @@ const jsonschema = {
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

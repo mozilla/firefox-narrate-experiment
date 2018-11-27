@@ -132,11 +132,5 @@ async function getStudySetup() {
 
   studySetup.allowEnroll = await cachingFirstRunShouldAllowEnroll()
 
-  const testingOverrides = await browser.study.getTestingOverrides()
-  studySetup.testing = {
-    variationName: testingOverrides.variationName,
-    firstRunTimestamp: testingOverrides.firstRunTimestamp,
-    expired: testingOverrides.expired
-  }
   return studySetup
 }
