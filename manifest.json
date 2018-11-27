@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
   "version": "0.1",
-  "name": "firefox-narrate-experiment",
+  "name": "Firefox Listen Study",
   "applications": {
     "gecko": {
-      "id": "firefox-narrate-experiment@mozilla"
+      "id": "firefox-listen-study@shield.mozilla.org"
     }
   },
-  "description": "Template for Experimental Firefox WebExtensions using libdweb APIs.",
+  "description": "Firefox’s Listen Study will measure interest in listening to web articles and evaluate the current Narrate user experience to understand the potential value to in promoting, improving, or expanding the feature.",
   "permissions": ["mozillaAddons", "storage"],
   "experiment_apis": {
     "narrate": {
@@ -17,13 +17,21 @@
         "paths": [["narrate"]],
         "script": "./src/experiment/narrate.js"
       }
+    },
+    "study": {
+      "schema": "./src/privileged/study/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "./src/privileged/study/api.js",
+        "paths": [["study"]]
+      }
     }
   },
   "icons": {
     "96": "listen-without-label.svg"
   },
   "background": {
-    "scripts": ["./src/main.js"]
+    "scripts": ["./src/study-setup.js", "./src/main.js"]
   },
   "content_scripts": [
     {

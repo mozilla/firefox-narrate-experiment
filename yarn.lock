@@ -891,6 +891,10 @@ commander@^2.14.1, commander@^2.3.0, commander@^2.6.0, commander@^2.9.0:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
 
+commander@^2.15.1:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+
 common-tags@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
@@ -1835,6 +1839,14 @@ fs-constants@^1.0.0:
 fs-extra@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.1.tgz#8abc128f7946e310135ddc93b98bddb410e7a34b"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
@@ -2857,10 +2869,6 @@ levn@^0.3.0, levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
-
-"libdweb@https://github.com/mozilla/libdweb.git":
-  version "0.0.0"
-  resolved "https://github.com/mozilla/libdweb.git#3745c372663d17b1abeb07835ff0b8a0e3aa342b"
 
 lie@~3.1.0:
   version "3.1.1"
@@ -4292,6 +4300,19 @@ shelljs@^0.7.5:
 shellwords@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
+
+shield-studies-addon-utils@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/shield-studies-addon-utils/-/shield-studies-addon-utils-5.0.3.tgz#3e901edb2e718c033eecedc84cc5337e160480c1"
+  dependencies:
+    ajv "^6.5.0"
+    commander "^2.15.1"
+    fs-extra "^6.0.1"
+    shield-study-schemas "^0.8.3"
+
+shield-study-schemas@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/shield-study-schemas/-/shield-study-schemas-0.8.3.tgz#db206249a9869499159d3847c7189857595f80cd"
 
 sign-addon@0.3.1:
   version "0.3.1"

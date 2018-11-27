@@ -240,6 +240,12 @@
                   context
                 )
             )
+          },
+          deactivate: async () => {
+            if (this.actor) {
+              this.actor.exit(reason)
+              delete this.actor
+            }
           }
         }
       }

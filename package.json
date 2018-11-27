@@ -5,10 +5,12 @@
   "devDependencies": {
     "lint-staged": "^7.2.0",
     "prettier": "^1.14.0",
+    "shield-studies-addon-utils": "5.0.3",
     "tape-ext": "latest",
     "web-ext": "2.8.0"
   },
   "scripts": {
+    "bundle-utils": "node_modules/shield-studies-addon-utils/bin/copyStudyUtils.js src/privileged",
     "test": "tape-ext 'test/*/manifest.json'",
     "build": "web-ext build --ignore-files !node_modules --ignore-files !node_modules/libdweb --ignore-files !node_modules/libdweb/src --ignore-files !node_modules/libdweb/src/**",
     "start": "MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly",

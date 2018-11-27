@@ -28,6 +28,13 @@
             }
           }
         ]
+      },
+      {
+        "name": "deactivate",
+        "type": "function",
+        "description": "Deactivates narrate experiment.",
+        "async": true,
+        "parameters": []
       }
     ]
   }
