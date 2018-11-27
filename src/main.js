@@ -13,51 +13,47 @@ class Feature {
             secondaryButtonLabel: "Not Now"
           }
         })
-        return new Feature()
+        return new Feature(true)
       }
       case "feature-passive": {
         browser.narrate.activate({
           iconURL: browser.extension.getURL("listen-with-label.svg"),
           iconWidth: 50
         })
-        return new Feature()
+        return new Feature(true)
       }
       default: {
-        return null
+        return new Feature(false)
       }
     }
   }
-  constructor() {
+  constructor(isActive) {
+    this.isActive = isActive
     this.state = this.readState()
     this.ports = new Set()
     this.onReceive = this.onReceive.bind(this)
     this.onDisconnect = this.onDisconnect.bind(this)
     this.onConnect = this.onConnect.bind(this)
-    this.onSuspend = this.onSuspend.bind(this)
     browser.runtime.onConnect.addListener(this.onConnect)
   }
   async readState() {
-    const state = await browser.storage.sync.get(["dispalySurvey"])
-    if (state.dispalySurvey == null) {
-      state.dispalySurvey = true
+    const state = await browser.storage.sync.get(["displaySurvey"])
+    if (state.displaySurvey == null) {
+      state.displaySurvey = true
     }
     return state
   }
   deactivate() {
     browser.narrate.deactivate()
     this.onConnect.removeListener(this.onConnect)
-    this.onSuspend.removeListener(this.onSuspend)
     for (const port of this.ports) {
       port.removeListener(this.onReceive)
       port.disconnect()
     }
   }
-  onSuspend() {
-    this.deactivate()
-  }
   onReceive(message, port) {
     if (message.type === "launch-survey") {
-      this.dispalySurvey()
+      this.displaySurvey()
     } else {
       const payload = {
         message: "narrate-playback",
@@ -74,18 +70,20 @@ class Feature {
     this.ports.delete(port)
   }
   async onConnect(port) {
-    console.log("onConnect")
-    this.ports.add(port)
-    port.onMessage.addListener(this.onReceive)
-    port.onDisconnect.addListener(this.onDisconnect)
-    const state = await this.state
-    console.log("connect", state)
-    port.postMessage({ type: "init", state })
+    if (this.isActive) {
+      this.ports.add(port)
+      port.onMessage.addListener(this.onReceive)
+      port.onDisconnect.addListener(this.onDisconnect)
+      const state = await this.state
+      port.postMessage({ type: "init", state })
+    } else {
+      port.disconnect()
+    }
   }
-  dispalySurvey() {
+  displaySurvey() {
     // don't await since we don't really care.
     browser.storage.sync.set(this.state)
-    this.state = { dispalySurvey: false }
+    this.state = { displaySurvey: false }
     for (const port of connections) {
       port.postMessage({ type: "disable-survey" })
     }

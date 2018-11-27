@@ -14,9 +14,7 @@ class NarrateExperiment {
     this.port = browser.runtime.connect()
     this.port.onDisconnect.addListener(this.onDisconnect)
     this.port.onMessage.addListener(this.onReceive)
-    if (this.isReaderReady()) {
-      this.onReaderLoaded()
-    } else {
+    if (!this.isReaderReady()) {
       const observer = new MutationObserver(this.onMutation)
       observer.observe(document.body, {
         attributes: true,
@@ -28,6 +26,12 @@ class NarrateExperiment {
   onMutation(mutationsList, observer) {
     if (this.isReaderReady()) {
       observer.disconnect()
+      this.onReaderLoaded()
+    }
+  }
+  onInit(state) {
+    this.state = state
+    if (this.isReaderReady()) {
       this.onReaderLoaded()
     }
   }
@@ -45,14 +49,6 @@ class NarrateExperiment {
 
     window.removeEventListener("beforeunload", this)
   }
-  disableSurvey() {
-    const survey = document.querySelector(".narrate-dropdown .narrate-survey")
-    if (survey) {
-      survey.removeEventListener("click", this)
-      survey.removeEventListener("change", this)
-      survey.remove()
-    }
-  }
   isReaderReady() {
     return document.body.classList.contains("loaded")
   }
@@ -61,9 +57,6 @@ class NarrateExperiment {
   }
   handleEvent(event) {
     switch (event.type) {
-      case "AboutReaderContentLoaded":
-        console.log("AboutReaderContentLoaded")
-        return this.onReaderLoaded()
       case "change":
         return this.onRateChange(event)
       case "click": {
@@ -114,10 +107,7 @@ class NarrateExperiment {
   onReceive(message) {
     switch (message.type) {
       case "init": {
-        if (message.state.dispalySurvey) {
-          this.diplaySurveyPrompt()
-        }
-        return
+        return this.onInit(message.state)
       }
       case "disable-survey": {
         return this.disableSurvey()
@@ -146,7 +136,7 @@ class NarrateExperiment {
       }
     }
   }
-  diplaySurveyPrompt() {
+  enableSurvey() {
     const survey = document.createElement("form")
     survey.addEventListener("change", this)
     survey.addEventListener("click", this)
@@ -182,6 +172,14 @@ class NarrateExperiment {
     const voices = document.querySelector(".narrate-voices")
     voices.parentElement.insertBefore(survey, voices.nextSibling)
   }
+  disableSurvey() {
+    const survey = document.querySelector(".narrate-dropdown .narrate-survey")
+    if (survey) {
+      survey.removeEventListener("click", this)
+      survey.removeEventListener("change", this)
+      survey.remove()
+    }
+  }
   showControls(dropdown) {
     dropdown.click()
     dropdown.classList.add("open")
@@ -195,8 +193,18 @@ class NarrateExperiment {
     dropdownPopup.style.top = `${popupTop}px`
   }
   onReaderLoaded() {
+    const { state } = this
+    if (state) {
+      this.setup(state)
+    }
+  }
+  setup({ displaySurvey }) {
     try {
       window.addEventListener("beforeunload", this)
+
+      if (displaySurvey) {
+        this.enableSurvey()
+      }
 
       const narrateDropDown = document.querySelector(".narrate-dropdown")
       this.showControls(narrateDropDown)
