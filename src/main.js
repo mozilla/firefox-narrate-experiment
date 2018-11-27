@@ -62,8 +62,8 @@ class Feature {
       const payload = {
         message: "narrate-playback",
         tab: `${port.sender.tab.id}`,
-        duration: message.duration,
-        reason: message.reason
+        duration: `${message.duration}`,
+        stopReason: message.reason
       }
       console.log(payload)
 
