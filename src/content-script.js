@@ -1,6 +1,5 @@
 class NarrateExperiment {
   static spawn() {
-    console.log("spawn", document.readyState)
     const self = new this()
     self.init()
     return self

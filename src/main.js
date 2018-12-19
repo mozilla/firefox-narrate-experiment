@@ -61,7 +61,6 @@ class Feature {
         duration: `${message.duration}`,
         stopReason: message.reason
       }
-      console.log(payload)
 
       browser.study.sendTelemetry(payload)
     }

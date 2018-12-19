@@ -22,7 +22,7 @@ const baseStudySetup = {
   // telemetry
   telemetry: {
     // default false. Actually send pings.
-    send: false,
+    send: true,
     // Marks pings with testing=true.  Set flag to `true` before final release
     removeTestingFlag: false
   },
@@ -31,31 +31,13 @@ const baseStudySetup = {
   endings: {
     /** standard endings */
     "user-disable": {
-      baseUrls: [
-        "https://qsurvey.mozilla.com/s3/Shield-Study-Example-Survey/?reason=user-disable"
-      ]
+      baseUrls: []
     },
     ineligible: {
       baseUrls: []
     },
     expired: {
-      baseUrls: [
-        "https://qsurvey.mozilla.com/s3/Shield-Study-Example-Survey/?reason=expired"
-      ]
-    },
-
-    /** Study specific endings */
-    "user-used-the-feature": {
-      baseUrls: [
-        "https://qsurvey.mozilla.com/s3/Shield-Study-Example-Survey/?reason=user-used-the-feature"
-      ],
-      category: "ended-positive"
-    },
-    "hated-the-feature": {
-      baseUrls: [
-        "https://qsurvey.mozilla.com/s3/Shield-Study-Example-Survey/?reason=hated-the-feature"
-      ],
-      category: "ended-negative"
+      baseUrls: []
     }
   },
 
