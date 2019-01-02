@@ -80,10 +80,11 @@ class Feature {
     }
   }
   displaySurvey() {
+    this.state = { displaySurvey: false }
     // don't await since we don't really care.
     browser.storage.sync.set(this.state)
-    this.state = { displaySurvey: false }
-    for (const port of connections) {
+    browser.tabs.create({ url: "https://www.research.net/r/FRLBYR5" })
+    for (const port of this.ports) {
       port.postMessage({ type: "disable-survey" })
     }
   }

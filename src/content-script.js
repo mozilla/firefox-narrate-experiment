@@ -59,7 +59,7 @@ class NarrateExperiment {
       case "change":
         return this.onRateChange(event)
       case "click": {
-        switch (event.target) {
+        switch (event.currentTarget) {
           case document.querySelector(".narrate-start-stop"): {
             return this.onPlaybackChange(event)
           }
@@ -118,7 +118,6 @@ class NarrateExperiment {
     this.port.postMessage({ type: "launch-survey" })
     // Note: Remove listener as clicks occurs for both windows and labels.
     event.currentTarget.removeEventListener("click", this)
-    window.open("https://www.research.net/r/FRLBYR5", "_blank")
   }
   onRateChange(event) {
     const rate = Number(event.target.value)
