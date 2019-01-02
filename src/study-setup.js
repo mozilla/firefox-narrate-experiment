@@ -1,17 +1,3 @@
-// TODO:
-
-// - Replace survey URLs
-// - Figure out how to target English only, United States and Canada
-// - Exclude users with containers extensions to avoid awesome bar conflicts
-// - Ping telemetry on start & on end
-// - Ping on every page load that is an article
-// - Need to handle end if occured through
-//    - navigate away (beforeunload in contentscript ?)
-//    - tab closed (beforeunload in content script ?)
-//    - close window
-//    - quit firefox
-// - Not sure how to - 5% of users who engage with Narrate return to listen within 30 days. (Experiment branch only)
-
 const baseStudySetup = {
   // used for activeExperiments tagging (telemetryEnvironment.setActiveExperiment)
   activeExperimentName: browser.runtime.id,
