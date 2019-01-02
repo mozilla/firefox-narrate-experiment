@@ -1,0 +1,41 @@
+[
+  {
+    "namespace": "narrate",
+    "functions": [
+      {
+        "name": "activate",
+        "type": "function",
+        "description": "Activates narrate experiment.",
+        "async": true,
+        "parameters": [
+          {
+            "name": "config",
+            "type": "object",
+            "properties": {
+              "iconURL": { "type": "string" },
+              "iconWidth": { "type": "number" },
+              "popup": {
+                "type": "object",
+                "optional": true,
+                "properties": {
+                  "iconURL": { "type": "string" },
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "primaryButtonLabel": { "type": "string" },
+                  "secondaryButtonLabel": { "type": "string" }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "deactivate",
+        "type": "function",
+        "description": "Deactivates narrate experiment.",
+        "async": true,
+        "parameters": []
+      }
+    ]
+  }
+]
