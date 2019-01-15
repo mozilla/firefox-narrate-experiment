@@ -4,7 +4,7 @@ class Feature {
       case "feature-active": {
         browser.narrate.activate({
           iconURL: browser.extension.getURL("listen-with-label.svg"),
-          iconWidth: 50,
+          iconWidth: 58,
           popup: {
             iconURL: browser.extension.getURL("listen-without-label-grey.svg"),
             title: "Want to listen instead ?",
@@ -18,7 +18,7 @@ class Feature {
       case "feature-passive": {
         browser.narrate.activate({
           iconURL: browser.extension.getURL("listen-with-label.svg"),
-          iconWidth: 50
+          iconWidth: 58
         })
         return new Feature(true)
       }
