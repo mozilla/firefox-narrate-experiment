@@ -1,12 +1,13 @@
 class Feature {
   static activate(studyInfo) {
-    switch (studyInfo.variation.name) {
+    const { name } = studyInfo.variation
+    switch (name) {
       case "feature-active": {
         browser.narrate.activate({
           iconURL: browser.extension.getURL("listen-with-label.svg"),
-          iconWidth: 50,
+          iconWidth: 58,
           popup: {
-            iconURL: browser.extension.getURL("listen-without-label-grey.svg"),
+            iconURL: browser.extension.getURL("listen-without-label-grey.png"),
             title: "Want to listen instead ?",
             description: "Firefox can read you any page on the internet.",
             primaryButtonLabel: "Listen to this Article",
@@ -18,7 +19,7 @@ class Feature {
       case "feature-passive": {
         browser.narrate.activate({
           iconURL: browser.extension.getURL("listen-with-label.svg"),
-          iconWidth: 50
+          iconWidth: 58
         })
         return new Feature(true)
       }
@@ -37,11 +38,16 @@ class Feature {
     browser.runtime.onConnect.addListener(this.onConnect)
   }
   async readState() {
-    const state = await browser.storage.sync.get(["displaySurvey"])
-    if (state.displaySurvey == null) {
-      state.displaySurvey = true
+    if (this.isActive) {
+      const state = await browser.storage.sync.get(["displaySurvey"])
+      if (state.displaySurvey == null) {
+        state.displaySurvey = true
+      }
+      state.isActive = true
+      return state
+    } else {
+      return { isActive: false, displaySurvey: false }
     }
-    return state
   }
   deactivate() {
     browser.narrate.deactivate()
@@ -52,32 +58,35 @@ class Feature {
     }
   }
   onReceive(message, port) {
-    if (message.type === "launch-survey") {
-      this.displaySurvey()
-    } else {
-      const payload = {
-        message: "narrate-playback",
-        tab: `${port.sender.tab.id}`,
-        duration: `${message.duration}`,
-        stopReason: message.reason
+    switch (message.type) {
+      case "launch-survey": {
+        return this.displaySurvey()
       }
-
-      browser.study.sendTelemetry(payload)
+      case "enter-reader": {
+        return browser.study.sendTelemetry({
+          message: "narrate-enter",
+          tab: `${port.sender.tab.id}`
+        })
+      }
+      case "stop-playback": {
+        return browser.study.sendTelemetry({
+          message: "narrate-playback",
+          tab: `${port.sender.tab.id}`,
+          duration: `${message.duration}`,
+          stopReason: message.reason
+        })
+      }
     }
   }
   onDisconnect(port) {
     this.ports.delete(port)
   }
   async onConnect(port) {
-    if (this.isActive) {
-      this.ports.add(port)
-      port.onMessage.addListener(this.onReceive)
-      port.onDisconnect.addListener(this.onDisconnect)
-      const state = await this.state
-      port.postMessage({ type: "init", state })
-    } else {
-      port.disconnect()
-    }
+    this.ports.add(port)
+    port.onMessage.addListener(this.onReceive)
+    port.onDisconnect.addListener(this.onDisconnect)
+    const state = await this.state
+    port.postMessage({ type: "init", state })
   }
   displaySurvey() {
     this.state = { displaySurvey: false }

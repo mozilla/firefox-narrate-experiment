@@ -9,6 +9,9 @@ class NarrateExperiment {
     this.onReceive = this.onReceive.bind(this)
     this.onDisconnect = this.onDisconnect.bind(this)
     this.onMutation = this.onMutation.bind(this)
+    this.onPlaybackUpdate = this.onPlaybackUpdate.bind(this)
+    this.playbackObserver = new MutationObserver(this.onPlaybackUpdate)
+    
 
     this.port = browser.runtime.connect()
     this.port.onDisconnect.addListener(this.onDisconnect)
@@ -38,6 +41,7 @@ class NarrateExperiment {
     this.port.onMessage.removeListener(this.onReceive)
     this.port.onDisconnect.removeListener(this.onDisconnect)
     document.removeEventListener("AboutReaderContentLoaded", this)
+    this.playbackObserver.disconnect()
 
     this.disableSurvey()
 
@@ -96,6 +100,19 @@ class NarrateExperiment {
       this.port.postMessage({
         type: "stop-playback",
         reason: "pause",
+        duration
+      })
+    }
+  }
+  onPlaybackUpdate() {
+    const narrateDropDown = document.querySelector(".narrate-dropdown")
+    const isSpeaking = narrateDropDown.classList.contains("speaking")
+    if (!isSpeaking && this.startTime != null) {
+      const duration = Date.now() - this.startTime
+      this.startTime = null
+      this.port.postMessage({
+        type: "stop-playback",
+        reason: "finished",
         duration
       })
     }
@@ -196,20 +213,31 @@ class NarrateExperiment {
       this.setup(state)
     }
   }
-  setup({ displaySurvey }) {
+  setup({ displaySurvey, isActive }) {
     try {
       window.addEventListener("beforeunload", this)
 
-      if (displaySurvey) {
-        this.enableSurvey()
-      }
-
-      const narrateDropDown = document.querySelector(".narrate-dropdown")
-      this.showControls(narrateDropDown)
+      this.port.postMessage({ type: "enter-reader" })
 
       const playbackButton = document.querySelector(".narrate-start-stop")
       playbackButton.addEventListener("click", this)
-      playbackButton.dispatchEvent(new MouseEvent("click"))
+
+      const narrateDropDown = document.querySelector(".narrate-dropdown")
+      this.playbackObserver.observe(narrateDropDown, {
+        attributes: true,
+        childList: false,
+        subtree: false
+      })
+
+      if (isActive) {
+        if (displaySurvey) {
+          this.enableSurvey()
+        }
+
+        this.showControls(narrateDropDown)
+
+        playbackButton.dispatchEvent(new MouseEvent("click"))
+      }
     } catch (error) {
       console.error(error)
     }
