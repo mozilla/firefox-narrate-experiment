@@ -11,7 +11,6 @@ class NarrateExperiment {
     this.onMutation = this.onMutation.bind(this)
     this.onPlaybackUpdate = this.onPlaybackUpdate.bind(this)
     this.playbackObserver = new MutationObserver(this.onPlaybackUpdate)
-    
 
     this.port = browser.runtime.connect()
     this.port.onDisconnect.addListener(this.onDisconnect)
@@ -178,6 +177,7 @@ class NarrateExperiment {
       input.style.MozAppearance = "none"
 
       const label = document.createElement("label")
+      label.style.color = "#333333"
       label.setAttribute("for", `rate-${index}`)
       label.textContent = "☆"
 
