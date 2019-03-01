@@ -10,7 +10,7 @@ class Feature {
             iconURL: browser.extension.getURL("listen-without-label-grey.png"),
             title: "Want to listen instead ?",
             description: "Firefox can read you any page on the internet.",
-            primaryButtonLabel: "Listen to this Article",
+            primaryButtonLabel: "Start Listening",
             secondaryButtonLabel: "Not Now"
           }
         })
