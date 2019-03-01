@@ -9,6 +9,7 @@
   },
   "description": "Firefox’s Listen Study will measure interest in listening to web articles and evaluate the current Narrate user experience to understand the potential value to in promoting, improving, or expanding the feature.",
   "permissions": ["mozillaAddons", "storage"],
+  "hidden": true,
   "experiment_apis": {
     "narrate": {
       "schema": "./src/experiment/narrate.json",
