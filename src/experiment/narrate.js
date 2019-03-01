@@ -217,6 +217,10 @@
     )
     description.textContent = popup.description
 
+    if (typeof notification.show === "function") {
+      notification.show()
+    }
+
     return document.querySelector("#mainPopupSet").appendChild(panel)
   }
   this.narrate = class NarrateAPI extends ExtensionAPI {
