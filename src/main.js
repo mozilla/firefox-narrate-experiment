@@ -63,10 +63,7 @@ class Feature {
         return this.displaySurvey()
       }
       case "enter-reader": {
-        return browser.study.sendTelemetry({
-          message: "narrate-enter",
-          tab: `${port.sender.tab.id}`
-        })
+        return this.enterNarrate()
       }
       case "stop-playback": {
         return browser.study.sendTelemetry({
@@ -96,6 +93,13 @@ class Feature {
     for (const port of this.ports) {
       port.postMessage({ type: "disable-survey" })
     }
+  }
+  enterNarrate() {
+    browser.narrate.disablePopup()
+    return browser.study.sendTelemetry({
+      message: "narrate-enter",
+      tab: `${port.sender.tab.id}`
+    })
   }
 }
 

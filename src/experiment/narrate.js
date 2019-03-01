@@ -99,15 +99,15 @@
     }
 
     onPrimaryAction(document) {
+      this.onDisablePopup()
       const button = getReaderButton(document)
       if (button) {
         button.click()
       }
-      this.onDisablePopup()
     }
     onSecondaryAction(document) {
-      hidePopup(document)
       this.onDisablePopup()
+      hidePopup(document)
     }
     onDisablePopup() {
       if (this.isPopupEnabled) {
@@ -244,6 +244,17 @@
                   context
                 )
             )
+          },
+          disablePopup: async () => {
+            if (this.actor) {
+              this.actor.onDisablePopup()
+            } else {
+              await extensionStorageSync.set(
+                context.extension,
+                { isPopupEnabled: false },
+                context
+              )
+            }
           },
           deactivate: async () => {
             if (this.actor) {

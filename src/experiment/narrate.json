@@ -30,6 +30,13 @@
         ]
       },
       {
+        "name": "disablePopup",
+        "type": "function",
+        "description": "Deactivates popup.",
+        "async": true,
+        "parameters": []
+      },
+      {
         "name": "deactivate",
         "type": "function",
         "description": "Deactivates narrate experiment.",
