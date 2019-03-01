@@ -89,7 +89,7 @@ class Feature {
     port.postMessage({ type: "init", state })
   }
   displaySurvey() {
-    this.state = { displaySurvey: false }
+    this.state.displaySurvey = false
     // don't await since we don't really care.
     browser.storage.sync.set(this.state)
     browser.tabs.create({ url: "https://www.research.net/r/FRLBYR5" })
