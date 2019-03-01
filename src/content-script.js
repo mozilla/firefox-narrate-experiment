@@ -27,7 +27,9 @@ class NarrateExperiment {
   onMutation(mutationsList, observer) {
     if (this.isReaderReady()) {
       observer.disconnect()
-      this.onReaderLoaded()
+      // Add some delay because reflow is not finished yet which causes
+      // incorrect positioning
+      setTimeout(() => this.onReaderLoaded(), 100)
     }
   }
   onInit(state) {
