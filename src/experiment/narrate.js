@@ -1,23 +1,24 @@
 {
+  /* eslint-disable */
   const { classes: Cc, interfaces: Ci, utils: Cu } = Components
   const { Services } = Cu.import("resource://gre/modules/Services.jsm", {})
   const { extensionStorageSync } = Cu.import(
     "resource://gre/modules/ExtensionStorageSync.jsm",
     {}
   )
-  const ANCHOR_SUFFIX = "popupnotificationanchor"
-  const ARCHOR_ID = "-notification-icon"
-  const ID = "reader-mode-button"
-  const POPUP_ID = "narrate-experiment-doorhanger"
-  const PRIMARY_ACTION = "narrate-experiment-primary-action"
-  const SECONDARY_ACTION = "narrate-experiment-secondary-action"
 
   const { ExtensionParent } = Cu.import(
     "resource://gre/modules/ExtensionParent.jsm",
     {}
   )
+  /* eslint-enable */
+  /* global ExtensionAPI */
   const { windowTracker } = ExtensionParent.apiManager.global
 
+  const ID = "reader-mode-button"
+  const POPUP_ID = "narrate-experiment-doorhanger"
+  const PRIMARY_ACTION = "narrate-experiment-primary-action"
+  const SECONDARY_ACTION = "narrate-experiment-secondary-action"
   class NarrateActor {
     static spawn(config, isPopupEnabled, disablePopup) {
       const self = new this(config, isPopupEnabled, disablePopup)
@@ -41,7 +42,7 @@
         this.onOpenWindow(window)
       }
     }
-    exit(reason) {
+    exit() {
       windowTracker.removeOpenListener(this.onOpenWindow)
       if (this.isPopupEnabled) {
         this.removeMessageListener()
@@ -88,12 +89,17 @@
           return this.onPrimaryAction(event.target)
         case SECONDARY_ACTION:
           return this.onSecondaryAction(event.target)
+        default:
+          return void event
       }
     }
     receiveMessage(message) {
       switch (message.name) {
         case "Reader:UpdateReaderButton": {
           return this.onReaderButtonUpdate(message)
+        }
+        default: {
+          return void message
         }
       }
     }
@@ -236,7 +242,7 @@
 
             this.actor = NarrateActor.spawn(
               config,
-              isPopupEnabled != false,
+              !(isPopupEnabled === false),
               () =>
                 extensionStorageSync.set(
                   context.extension,
@@ -258,7 +264,7 @@
           },
           deactivate: async () => {
             if (this.actor) {
-              this.actor.exit(reason)
+              this.actor.exit()
               delete this.actor
             }
           }
@@ -267,7 +273,7 @@
     }
     onShutdown(reason) {
       if (this.actor) {
-        this.actor.exit(reason)
+        this.actor.exit()
         delete this.actor
       }
     }

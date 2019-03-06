@@ -7,11 +7,15 @@
     "prettier": "^1.16.4",
     "shield-studies-addon-utils": "5.2.1",
     "tape-ext": "latest",
-    "web-ext": "2.9.3"
+    "web-ext": "2.9.3",
+    "eslint": "5.14.1",
+    "eslint-plugin-mozilla": "1.1.1",
+    "eslint-plugin-no-unsanitized": "3.0.2"
   },
   "scripts": {
     "bundle-utils": "node_modules/shield-studies-addon-utils/bin/copyStudyUtils.js src/privileged",
     "test": "tape-ext 'test/*/manifest.json'",
+    "lint": "eslint src",
     "build": "web-ext build --ignore-files !node_modules --ignore-files !node_modules/libdweb --ignore-files !node_modules/libdweb/src --ignore-files !node_modules/libdweb/src/**",
     "start": "MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly",
     "debug": "MOZ_DISABLE_CONTENT_SANDBOX=1 web-ext run --firefox=nightly --pref shieldStudy.logLevel=All",

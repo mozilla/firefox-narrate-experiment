@@ -38,6 +38,7 @@ class Feature {
     browser.runtime.onConnect.addListener(this.onConnect)
   }
   async readState() {
+    /* eslint-disable no-else-return */
     if (this.isActive) {
       const state = await browser.storage.sync.get(["displaySurvey"])
       if (state.displaySurvey == null) {
@@ -72,6 +73,9 @@ class Feature {
           duration: `${message.duration}`,
           stopReason: message.reason
         })
+      }
+      default: {
+        return void message
       }
     }
   }
@@ -149,9 +153,11 @@ class StudyLifeCycleHandler {
 
 const main = async () => {
   const studyHandler = new StudyLifeCycleHandler()
+  /* global getStudySetup */
   const studySetup = await getStudySetup()
   await browser.study.logger.log(["Study setup: ", studySetup])
   await browser.study.setup(studySetup)
+  void studyHandler
 }
 
 main()

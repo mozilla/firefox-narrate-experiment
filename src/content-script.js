@@ -72,12 +72,15 @@ class NarrateExperiment {
             return this.onSurveyClicked(event)
           }
           default: {
-            return
+            return void event
           }
         }
       }
       case "beforeunload": {
         return this.onBeforeUnload(event)
+      }
+      default: {
+        return void event
       }
     }
   }
@@ -129,6 +132,9 @@ class NarrateExperiment {
       case "disable-survey": {
         return this.disableSurvey()
       }
+      default: {
+        return void message
+      }
     }
   }
   onSurveyClicked(event) {
@@ -169,7 +175,6 @@ class NarrateExperiment {
     link.style.textDecoration = "none"
     survey.append(link)
 
-    const rating = document.createElement("fieldset")
     for (const index of [1, 2, 3, 4, 5]) {
       const input = document.createElement("input")
       input.type = "radio"
