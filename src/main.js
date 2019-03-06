@@ -85,10 +85,11 @@ class Feature {
     const state = await this.state
     port.postMessage({ type: "init", state })
   }
-  displaySurvey() {
-    this.state.displaySurvey = false
+  async displaySurvey() {
+    const state = await this.state
+    state.displaySurvey = false
     // don't await since we don't really care.
-    browser.storage.sync.set(this.state)
+    browser.storage.sync.set(state)
     browser.tabs.create({ url: "https://www.research.net/r/FRLBYR5" })
     for (const port of this.ports) {
       port.postMessage({ type: "disable-survey" })
