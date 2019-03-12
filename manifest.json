@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
-  "version": "0.5",
+  "version": "0.6",
   "name": "Firefox Listen Study",
   "applications": {
     "gecko": {
-      "id": "firefox-listen-study@shield.mozilla.org"
+      "id": "firefox-listen-study@mozilla.org"
     }
   },
   "description": "Firefox’s Listen Study will measure interest in listening to web articles and evaluate the current Narrate user experience to understand the potential value to in promoting, improving, or expanding the feature.",
